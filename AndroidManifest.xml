@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="10"
+        android:minSdkVersion="14"
         android:targetSdkVersion="18" />
 
     <application
@@ -26,11 +26,11 @@
             android:name="hk.hku.qboy.catcher.TaskDetail"
             android:label="@string/title_activity_task_detail" >
         </activity>
-        
-        <provider android:name="TaskProvider"
-                  android:authorities="hk.hku.qboy.catcher.tasks" >
+
+        <provider
+            android:name="TaskProvider"
+            android:authorities="hk.hku.qboy.catcher.tasks" >
         </provider>
-        
     </application>
 
 </manifest>
