@@ -23,7 +23,8 @@ public class TaskDetail extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_detail);
 
-		final EditText title_edit = (EditText) findViewById(R.id.editText1);
+		final EditText title_edit = (EditText) findViewById(R.id.eventTitleInput);
+		
 		final EditText color_edit = (EditText) findViewById(R.id.editText2);
 		final EditText ddl_edit = (EditText) findViewById(R.id.editText3);
 
