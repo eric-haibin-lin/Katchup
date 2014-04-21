@@ -23,6 +23,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("SimpleDateFormat")
@@ -31,9 +32,13 @@ public class TaskDetail extends Activity {
 	static private final Uri books_provider = TaskProvider.CONTENT_URI;
 	static private String log_tag = "catcher";
 	static final int DATE_DIALOG_ID = 999;
+	static final int EDIT_PAST_TASK = 1;
+	static final int ADD_NEW_TASK = 2;
 
 	EditText title_edit;
 	EditText color_edit;
+	TextView deadline_text;
+	Switch urgent_switch;
 
 	Task currentTask;
 
@@ -43,20 +48,21 @@ public class TaskDetail extends Activity {
 
 	int isUrgent;
 	String title;
+	String color;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.detail_activity);
 
-		title_edit = (EditText) findViewById(R.id.eventTitleInput);
-		color_edit = (EditText) findViewById(R.id.tagColorButton);
+		getViewsById();
 
 		Intent intent = getIntent();
 		if (intent.hasExtra("title_key")) {
 			title = intent.getStringExtra("title_key");
-			fillInCurrentTaskData();
-		}
+			fillInCurrentTaskData(EDIT_PAST_TASK);
+		} else
+			fillInCurrentTaskData(ADD_NEW_TASK);
 
 		addListenerOnUpdateButton();
 		addListenerOnSwitchButton();
@@ -71,17 +77,60 @@ public class TaskDetail extends Activity {
 		return true;
 	}
 
-	private void fillInCurrentTaskData() {
-		title_edit.setText(title);
-		currentTask = new Task(this, title);
-		String ddl = currentTask.getDeadline();
-		currentTask.printDebugInfo();
-		parseDeadlineString(ddl);
-		
+	private void getViewsById() {
+		title_edit = (EditText) findViewById(R.id.eventTitleInput);
+		color_edit = (EditText) findViewById(R.id.tagColorButton);
+		deadline_text = (TextView) findViewById(R.id.deadlineText);
+		urgent_switch = (Switch) findViewById(R.id.urgentSwitch);
+
+	}
+
+	private void fillInCurrentTaskData(int state) {
+		switch (state) {
+		case EDIT_PAST_TASK: {
+			title_edit.setText(title);
+			currentTask = new Task(this, title);
+			String ddl = currentTask.getDeadline();
+			isUrgent = currentTask.getUrgent();
+
+			color = currentTask.getColor();
+
+			if (isUrgent == 1) {
+				urgent_switch.setChecked(true);
+			} else
+				urgent_switch.setChecked(false);
+
+			currentTask.printDebugInfo();
+			parseDeadlineString(ddl);
+			deadline_text.setText(ddl);
+			color_edit.setText(color);
+			break;
+		}
+		case ADD_NEW_TASK: {
+			newYear = Integer.valueOf(getCurrentYear());
+			newMonth = Integer.valueOf(getCurrentMonth());
+			newDay = Integer.valueOf(getCurrentDay());
+			deadline_text.setText(makeDeadline());
+
+		}
+		default:
+			break;
+		}
 	}
 
 	private void parseDeadlineString(String ddl) {
-		//TODO: parse the deadline string to get day, month, year.
+		// parse the deadline string to get day, month, year.
+		String delims = "-";
+		String[] tokens = ddl.split(delims);
+		newYear = Integer.valueOf(tokens[0]);
+		newMonth = Integer.valueOf(tokens[1]);
+		newDay = Integer.valueOf(tokens[2]);
+	}
+
+	private String makeDeadline() {
+		String ddl = newYear + "-" + newMonth + "-" + newDay;
+		return ddl;
+
 	}
 
 	private String getCurrentTime() {
@@ -120,7 +169,6 @@ public class TaskDetail extends Activity {
 
 	// switch button
 	private void addListenerOnSwitchButton() {
-		final Switch urgent_switch = (Switch) findViewById(R.id.urgentSwitch);
 
 		Switch.OnCheckedChangeListener switchListerner = new Switch.OnCheckedChangeListener() {
 			@Override
@@ -146,7 +194,7 @@ public class TaskDetail extends Activity {
 				title = title_edit.getText().toString();
 				String color = color_edit.getText().toString();
 
-				String ddl = newYear + "-" + newMonth + "-" + newDay ;
+				String ddl = newYear + "-" + newMonth + "-" + newDay;
 
 				currentTask = new Task(TaskDetail.this, title);
 
@@ -156,8 +204,12 @@ public class TaskDetail extends Activity {
 
 				int num_rows_updated = currentTask.update();
 				Toast.makeText(getBaseContext(),
-						num_rows_updated + " rows updated", Toast.LENGTH_SHORT)
+						num_rows_updated + " task updated", Toast.LENGTH_SHORT)
 						.show();
+
+				Intent intent = new Intent(TaskDetail.this, MainActivity.class);
+				startActivity(intent);
+
 			}
 		};
 
@@ -182,11 +234,9 @@ public class TaskDetail extends Activity {
 		switch (id) {
 		case DATE_DIALOG_ID:
 			// set date picker as current date
-			newYear = Integer.valueOf(getCurrentYear());
-			newMonth = Integer.valueOf(getCurrentMonth()) - 1;
-			newDay = Integer.valueOf(getCurrentDay());
+
 			return new DatePickerDialog(this, datePickerListener, newYear,
-					newMonth, newDay);
+					newMonth - 1, newDay);
 		}
 		return null;
 	}
@@ -198,6 +248,7 @@ public class TaskDetail extends Activity {
 			newYear = selectedYear;
 			newMonth = selectedMonth + 1;
 			newDay = selectedDay;
+			deadline_text.setText(makeDeadline());
 		}
 	};
 

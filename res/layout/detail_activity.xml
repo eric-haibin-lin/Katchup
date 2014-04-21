@@ -52,6 +52,13 @@
                 android:layout_height="34dp"
                 android:layout_marginLeft="10dp"
                 android:text="Select Deadline" />
+
+            <TextView
+                android:id="@+id/deadlineText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
         </LinearLayout>
 
         <GridLayout
