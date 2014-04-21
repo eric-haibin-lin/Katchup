@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,6 +32,11 @@ public class TaskDetail extends Activity {
 	static private String log_tag = "catcher";
 	static final int DATE_DIALOG_ID = 999;
 
+	EditText title_edit;
+	EditText color_edit;
+
+	Task currentTask;
+
 	int newYear;
 	int newMonth;
 	int newDay;
@@ -43,8 +49,14 @@ public class TaskDetail extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.detail_activity);
 
-		// Intent intent = getIntent();
-		// String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+		title_edit = (EditText) findViewById(R.id.eventTitleInput);
+		color_edit = (EditText) findViewById(R.id.tagColorButton);
+
+		Intent intent = getIntent();
+		if (intent.hasExtra("title_key")) {
+			title = intent.getStringExtra("title_key");
+			fillInCurrentTaskData();
+		}
 
 		addListenerOnUpdateButton();
 		addListenerOnSwitchButton();
@@ -57,6 +69,19 @@ public class TaskDetail extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.task_detail, menu);
 		return true;
+	}
+
+	private void fillInCurrentTaskData() {
+		title_edit.setText(title);
+		currentTask = new Task(this, title);
+		String ddl = currentTask.getDeadline();
+		currentTask.printDebugInfo();
+		parseDeadlineString(ddl);
+		
+	}
+
+	private void parseDeadlineString(String ddl) {
+		//TODO: parse the deadline string to get day, month, year.
 	}
 
 	private String getCurrentTime() {
@@ -115,24 +140,21 @@ public class TaskDetail extends Activity {
 
 	// update button
 	private void addListenerOnUpdateButton() {
-		final EditText title_edit = (EditText) findViewById(R.id.eventTitleInput);
-
-		final EditText color_edit = (EditText) findViewById(R.id.tagColorButton);
 
 		View.OnClickListener update_button_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
 				title = title_edit.getText().toString();
 				String color = color_edit.getText().toString();
 
-				String ddl = newYear + "-" + newMonth + "-" + newDay + "-";
+				String ddl = newYear + "-" + newMonth + "-" + newDay ;
 
-				Task task = new Task(TaskDetail.this, title);
+				currentTask = new Task(TaskDetail.this, title);
 
-				task.setUrgent(isUrgent);
-				task.setDeadline(ddl);
-				task.setColor(color);
+				currentTask.setUrgent(isUrgent);
+				currentTask.setDeadline(ddl);
+				currentTask.setColor(color);
 
-				int num_rows_updated = task.update();
+				int num_rows_updated = currentTask.update();
 				Toast.makeText(getBaseContext(),
 						num_rows_updated + " rows updated", Toast.LENGTH_SHORT)
 						.show();
@@ -161,7 +183,7 @@ public class TaskDetail extends Activity {
 		case DATE_DIALOG_ID:
 			// set date picker as current date
 			newYear = Integer.valueOf(getCurrentYear());
-			newMonth = Integer.valueOf(getCurrentMonth());
+			newMonth = Integer.valueOf(getCurrentMonth()) - 1;
 			newDay = Integer.valueOf(getCurrentDay());
 			return new DatePickerDialog(this, datePickerListener, newYear,
 					newMonth, newDay);

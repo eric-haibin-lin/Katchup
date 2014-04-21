@@ -1,8 +1,10 @@
 package hk.hku.qboy.catcher;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,28 +13,45 @@ import android.widget.TextView;
 
 public class TaskCursorAdapter extends CursorAdapter {
 
+	Context context;
+	String currentTitle;
+	String currentColor;
+	String isUrgent;
+
 	public TaskCursorAdapter(Context context, Cursor c) {
 		super(context, c);
+		this.context = context;
 	}
 
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-		TextView title = (TextView) view.findViewById(R.id.title);
-		title.setText(cursor.getString(cursor
-				.getColumnIndex(TaskProvider.TITLE)));
+		getDataFromCursor(cursor);
+		addOnClickListener(view, currentTitle);
+		updateDataInListView(view);
 
-		Button color = (Button) view.findViewById(R.id.color);
-		color.setText(cursor.getString(cursor
-				.getColumnIndex(TaskProvider.COLOR)));
+	}
 
-		Button urgent = (Button) view.findViewById(R.id.urgent);
+	private void getDataFromCursor(Cursor cursor) {
+		currentTitle = cursor.getString(cursor
+				.getColumnIndex(TaskProvider.TITLE));
+
+		currentColor = cursor.getString(cursor
+				.getColumnIndex(TaskProvider.COLOR));
 
 		int urgentValue = cursor.getInt(cursor
 				.getColumnIndex(TaskProvider.URGENT));
-		String isUrgent = urgentValue > 0 ? "Urgent" : "Not Urgent";
-		urgent.setText(isUrgent);
-		
+		isUrgent = urgentValue > 0 ? "Urgent" : "Not Urgent";
 
+	}
+
+	private void updateDataInListView(View view) {
+		TextView title = (TextView) view.findViewById(R.id.title);
+		Button urgent = (Button) view.findViewById(R.id.urgent);
+		Button color = (Button) view.findViewById(R.id.color);
+
+		title.setText(currentTitle);
+		color.setText(currentColor);
+		urgent.setText(isUrgent);
 	}
 
 	@Override
@@ -44,10 +63,19 @@ public class TaskCursorAdapter extends CursorAdapter {
 		return v;
 	}
 
-	private void addOnClickListener() {
-		
-		
+	private void addOnClickListener(View view, String currentTitle) {
+		Button editButton = (Button) view.findViewById(R.id.edit);
+		final String title = currentTitle;
+		View.OnClickListener edit_button_on_click_listener = new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(context, TaskDetail.class);
+				intent.putExtra("title_key", title);
+				Log.d("ADAPTER", title);
+				context.startActivity(intent);
+			}
+		};
+		editButton.setOnClickListener(edit_button_on_click_listener);
+
 		return;
 	}
-
 }
