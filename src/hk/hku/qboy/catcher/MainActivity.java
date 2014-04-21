@@ -19,14 +19,7 @@ public class MainActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main1);
 
-		Cursor cursor = managedQuery(tasks_provider, null, null, null, null);
-
-		String[] columns = new String[] { TaskProvider.TITLE,
-				TaskProvider.COLOR, TaskProvider.DDL };
-		int[] views = new int[] { R.id.table_string, R.id.table_isbn, R.id.table_ddl };
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-				R.layout.list, cursor, columns, views);
-		this.setListAdapter(adapter);
+		setListAdapter();
 
 		final Button detail_button = (Button) findViewById(R.id.button1);
 
@@ -37,16 +30,21 @@ public class MainActivity extends ListActivity {
 				startActivity(intent);
 			}
 		};
-
 		detail_button.setOnClickListener(detail_button_on_click_listener);
 
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+
+	private void setListAdapter() {
+		Cursor cursor = managedQuery(tasks_provider, null, null, null, null);
+		TaskCursorAdapter taskAdapter = new TaskCursorAdapter(this, cursor);
+		this.setListAdapter(taskAdapter);
 	}
 
 }

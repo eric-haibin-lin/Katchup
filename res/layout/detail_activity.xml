@@ -51,8 +51,7 @@
                 android:layout_width="84dp"
                 android:layout_height="34dp"
                 android:layout_marginLeft="10dp"
-                android:text="Select" />
-
+                android:text="Select Deadline" />
         </LinearLayout>
 
         <GridLayout
@@ -70,8 +69,8 @@
                 android:layout_row="0"
                 android:text="Urgent" />
 
-            <Button
-                android:id="@+id/tagButton"
+            <EditText
+                android:id="@+id/tagColorButton"
                 android:layout_width="106dp"
                 android:layout_height="25dp"
                 android:layout_column="0"
@@ -81,8 +80,7 @@
                 android:layout_row="0"
                 android:background="#C6E2FF"
                 android:shape="oval"
-                android:text="Tag" />
-
+                android:text="Color" />
         </GridLayout>
 
         <LinearLayout
@@ -106,9 +104,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_weight="0.03"
                 android:text="Done" />
-
         </LinearLayout>
-
     </LinearLayout>
 
 </LinearLayout>

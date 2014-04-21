@@ -49,8 +49,8 @@ public class TaskProvider extends ContentProvider {
 	private static final String DATABASE_CREATE = "create table "
 			+ DATABASE_TABLE + " (" + _ID
 			+ " integer primary key autoincrement, " + TITLE
-			+ " text not null, " + DDL + " text not null, " + COLOR
-			+ " text not null);";
+			+ " text not null, " + DDL + " text not null, " + URGENT
+			+ " int not null, " + COLOR + " text not null);";
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		DatabaseHelper(Context context) {
@@ -61,6 +61,7 @@ public class TaskProvider extends ContentProvider {
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(DATABASE_CREATE);
 		}
+
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			Log.w(LOG_TAG, "upgrading database from version " + oldVersion
