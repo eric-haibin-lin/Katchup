@@ -62,7 +62,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 		bindView(v, context, cursor);
 		return v;
 	}
-
+	
 	private void addOnClickListener(View view, String currentTitle) {
 		Button editButton = (Button) view.findViewById(R.id.edit);
 		final String title = currentTitle;
