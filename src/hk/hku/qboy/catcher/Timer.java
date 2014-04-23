@@ -1,9 +1,14 @@
 package hk.hku.qboy.catcher;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.widget.TextView;
+import android.widget.Toast;
 
+@SuppressLint("SimpleDateFormat")
 public class Timer {
 
 	private long startTime = 0L;
@@ -17,6 +22,9 @@ public class Timer {
 
 	private Handler customHandler = new Handler();
 	private Runnable updateTimerThread;
+
+	String timeFrom;
+	String timeTo;
 
 	public Timer(TextView timerValue) {
 		this.timerValue = timerValue;
@@ -50,6 +58,7 @@ public class Timer {
 		customHandler.postDelayed(updateTimerThread, 0);
 		isCountingTime = true;
 		keepCounting = true;
+		timeFrom = getCurrentTime();
 	}
 
 	public void finish() {
@@ -58,5 +67,19 @@ public class Timer {
 		timeInMilliseconds = 0L;
 		timeSwapBuff = 0L;
 		updatedTime = 0L;
+		timeTo = getCurrentTime();
 	}
+
+	public String makeRecord() {
+		return timeFrom + " - " + timeTo;
+	}
+
+	private String getCurrentTime() {
+		Calendar c = Calendar.getInstance();
+		System.out.println("Current time => " + c.getTime());
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd HH:mm");
+		String formattedDate = df.format(c.getTime());
+		return formattedDate;
+	}
+
 }

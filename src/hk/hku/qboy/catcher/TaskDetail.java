@@ -39,6 +39,7 @@ public class TaskDetail extends Activity {
 	EditText color_edit;
 	TextView deadline_text;
 	Switch urgent_switch;
+	TextView task_list;
 
 	Task currentTask;
 
@@ -49,6 +50,8 @@ public class TaskDetail extends Activity {
 	int isUrgent;
 	String title;
 	String color;
+
+	String record;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +85,7 @@ public class TaskDetail extends Activity {
 		color_edit = (EditText) findViewById(R.id.tagColorButton);
 		deadline_text = (TextView) findViewById(R.id.deadlineText);
 		urgent_switch = (Switch) findViewById(R.id.urgentSwitch);
-
+		task_list = (TextView) findViewById(R.id.taskList);
 	}
 
 	private void fillInCurrentTaskData(int state) {
@@ -92,7 +95,7 @@ public class TaskDetail extends Activity {
 			currentTask = new Task(this, title);
 			String ddl = currentTask.getDeadline();
 			isUrgent = currentTask.getUrgent();
-
+			record = currentTask.getRecord();
 			color = currentTask.getColor();
 
 			if (isUrgent == 1) {
@@ -104,6 +107,8 @@ public class TaskDetail extends Activity {
 			parseDeadlineString(ddl);
 			deadline_text.setText(ddl);
 			color_edit.setText(color);
+			task_list.setText(record);
+
 			break;
 		}
 		case ADD_NEW_TASK: {
@@ -133,21 +138,10 @@ public class TaskDetail extends Activity {
 
 	}
 
-	private String getCurrentTime() {
-		Calendar c = Calendar.getInstance();
-		System.out.println("Current time => " + c.getTime());
-
-		SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		String formattedDate = df.format(c.getTime());
-		Toast.makeText(this, formattedDate, Toast.LENGTH_SHORT).show();
-		return formattedDate;
-	}
-
 	private String getCurrentYear() {
 		Calendar c = Calendar.getInstance();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy");
 		String formattedDate = df.format(c.getTime());
-		Toast.makeText(this, formattedDate, Toast.LENGTH_SHORT).show();
 		return formattedDate;
 	}
 
@@ -155,7 +149,6 @@ public class TaskDetail extends Activity {
 		Calendar c = Calendar.getInstance();
 		SimpleDateFormat df = new SimpleDateFormat("MM");
 		String formattedDate = df.format(c.getTime());
-		Toast.makeText(this, formattedDate, Toast.LENGTH_SHORT).show();
 		return formattedDate;
 	}
 
@@ -163,7 +156,6 @@ public class TaskDetail extends Activity {
 		Calendar c = Calendar.getInstance();
 		SimpleDateFormat df = new SimpleDateFormat("dd");
 		String formattedDate = df.format(c.getTime());
-		Toast.makeText(this, formattedDate, Toast.LENGTH_SHORT).show();
 		return formattedDate;
 	}
 

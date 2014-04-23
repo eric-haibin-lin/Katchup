@@ -19,6 +19,7 @@ public class MainActivity extends ListActivity {
 	private Button startButton;
 	private TextView timerValue;
 	private Timer timer;
+	private Task task;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +58,16 @@ public class MainActivity extends ListActivity {
 		startButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				if (timer.isCountingTime) {
-					timer.pause();
+					timer.finish();
+					if (task != null) {
+						String newTimerRecord = timer.makeRecord();
+						task.addTrackRecord(newTimerRecord);
+						task.update();
+					}
 				} else {
-					timer.start();
+					if (task != null) {
+						timer.start();
+					}
 				}
 			}
 		});
@@ -81,6 +89,13 @@ public class MainActivity extends ListActivity {
 		Cursor cursor = managedQuery(tasks_provider, null, null, null, null);
 		TaskCursorAdapter taskAdapter = new TaskCursorAdapter(this, cursor);
 		this.setListAdapter(taskAdapter);
+	}
+
+	public void taskStart(String currentTitle) {
+		TextView taskText = (TextView) findViewById(R.id.taskText);
+		taskText.setText(currentTitle);
+		task = new Task(this, currentTitle);
+
 	}
 
 }

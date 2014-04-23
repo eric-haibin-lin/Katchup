@@ -20,6 +20,8 @@ public class Task {
 	private String title;
 	private String color;
 	private String ddl;
+	private String newRecord;
+	private String record = "";
 
 	// Constructor
 	public Task(Activity activity, String title) {
@@ -57,6 +59,15 @@ public class Task {
 		return this.color;
 	}
 
+	public void setRecord(String record) {
+		this.record = record;
+		return;
+	}
+
+	public String getRecord() {
+		return this.record;
+	}
+
 	public int update() {
 		return this.taskModel.update(makeContent());
 	}
@@ -76,6 +87,8 @@ public class Task {
 			setColor(cursor
 					.getString(cursor.getColumnIndex(TaskProvider.COLOR)));
 			setUrgent(cursor.getInt(cursor.getColumnIndex(TaskProvider.URGENT)));
+			setRecord(cursor.getString(cursor
+					.getColumnIndex(TaskProvider.RECORD)));
 
 			Log.d("Task", "Find record with ddl: " + ddl);
 		} else
@@ -89,7 +102,7 @@ public class Task {
 		content_values.put(TaskProvider.DDL, ddl);
 		content_values.put(TaskProvider.COLOR, color);
 		content_values.put(TaskProvider.URGENT, urgent);
-
+		content_values.put(TaskProvider.RECORD, record);
 		return content_values;
 
 	}
@@ -101,4 +114,8 @@ public class Task {
 		Log.d("TASK_DEBUG", "URGENT: " + this.urgent);
 	}
 
+	public void addTrackRecord(String newRecord) {
+		this.newRecord = newRecord;
+		setRecord(this.record + " ~ " + newRecord);
+	}
 }

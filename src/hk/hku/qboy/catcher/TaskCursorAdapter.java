@@ -17,6 +17,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 	String currentTitle;
 	String currentColor;
 	String isUrgent;
+	MainActivity main;
 
 	public TaskCursorAdapter(Context context, Cursor c) {
 		super(context, c);
@@ -27,7 +28,9 @@ public class TaskCursorAdapter extends CursorAdapter {
 	public void bindView(View view, Context context, Cursor cursor) {
 		getDataFromCursor(cursor);
 		addOnClickListener(view, currentTitle);
+		addStartClickListener(view);
 		updateDataInListView(view);
+		main = (MainActivity) context;
 
 	}
 
@@ -42,6 +45,17 @@ public class TaskCursorAdapter extends CursorAdapter {
 				.getColumnIndex(TaskProvider.URGENT));
 		isUrgent = urgentValue > 0 ? "Urgent" : "Not Urgent";
 
+	}
+
+	private void addStartClickListener(View view) {
+		Button startButton = (Button) view.findViewById(R.id.startButton);
+		final String title = currentTitle;
+		View.OnClickListener edit_button_on_click_listener = new View.OnClickListener() {
+			public void onClick(View v) {
+				main.taskStart(title);
+			}
+		};
+		startButton.setOnClickListener(edit_button_on_click_listener);
 	}
 
 	private void updateDataInListView(View view) {
@@ -62,7 +76,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 		bindView(v, context, cursor);
 		return v;
 	}
-	
+
 	private void addOnClickListener(View view, String currentTitle) {
 		Button editButton = (Button) view.findViewById(R.id.edit);
 		final String title = currentTitle;
