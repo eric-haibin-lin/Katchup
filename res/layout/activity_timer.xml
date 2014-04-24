@@ -14,16 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="No task" />
-
-    <Button
-        android:id="@+id/startButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="58dp"
-        android:text="Start/Pause" />
+        android:text="Current task" />
 
     <TextView
         android:id="@+id/timerValue"
@@ -33,5 +24,31 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="110dp"
         android:text="0:00" />
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Start/Pause" />
+
+    <CheckBox
+        android:id="@+id/wifiBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/startButton"
+        android:layout_marginTop="67dp"
+        android:text="Turn off Wifi" />
+
+
+    <CheckBox
+        android:id="@+id/cellularBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/wifiBox"
+        android:text="Turn off Cellular data" />
 
 </RelativeLayout>

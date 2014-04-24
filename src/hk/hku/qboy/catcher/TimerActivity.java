@@ -1,7 +1,14 @@
 package hk.hku.qboy.catcher;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -13,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 public class TimerActivity extends Activity {
@@ -93,6 +101,7 @@ public class TimerActivity extends Activity {
 						task.addTrackRecord(newTimerRecord);
 						task.update();
 					}
+					resetSettings();
 					Intent i = new Intent(TimerActivity.this,
 							MainActivity.class);
 					startActivity(i);
@@ -100,6 +109,8 @@ public class TimerActivity extends Activity {
 				} else {
 					if (task != null) {
 						timer.start();
+						checkSettings();
+
 					}
 				}
 			}
@@ -128,6 +139,78 @@ public class TimerActivity extends Activity {
 	private void setCurrentTaskText(String currentTitle) {
 		TextView taskText = (TextView) findViewById(R.id.taskText);
 		taskText.setText(currentTitle);
+	}
+
+	@SuppressWarnings("deprecation")
+	private void checkSettings() {
+		final CheckBox wifiBox = (CheckBox) findViewById(R.id.wifiBox);
+		final CheckBox cellularBox = (CheckBox) findViewById(R.id.cellularBox);
+
+		if (wifiBox.isChecked()) {
+			WifiManager wifiManager = (WifiManager) this
+					.getSystemService(Context.WIFI_SERVICE);
+			wifiManager.setWifiEnabled(false);
+
+		}
+
+		if (cellularBox.isChecked()) {
+			setMobileDataEnabled(false);
+		}
+
+	}
+
+	private void resetSettings() {
+		final CheckBox wifiBox = (CheckBox) findViewById(R.id.wifiBox);
+		final CheckBox cellularBox = (CheckBox) findViewById(R.id.cellularBox);
+
+		if (wifiBox.isChecked()) {
+			WifiManager wifiManager = (WifiManager) this
+					.getSystemService(Context.WIFI_SERVICE);
+			wifiManager.setWifiEnabled(true);
+
+		}
+
+		if (cellularBox.isChecked()) {
+			setMobileDataEnabled(true);
+		}
+
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void setMobileDataEnabled(boolean enabled) {
+		final ConnectivityManager conman = (ConnectivityManager) this
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		try {
+			final Class conmanClass = Class
+					.forName(conman.getClass().getName());
+			final Field iConnectivityManagerField = conmanClass
+					.getDeclaredField("mService");
+			iConnectivityManagerField.setAccessible(true);
+			final Object iConnectivityManager = iConnectivityManagerField
+					.get(conman);
+			final Class iConnectivityManagerClass = Class
+					.forName(iConnectivityManager.getClass().getName());
+			final Method setMobileDataEnabledMethod = iConnectivityManagerClass
+					.getDeclaredMethod("setMobileDataEnabled", Boolean.TYPE);
+
+			setMobileDataEnabledMethod.setAccessible(true);
+
+			setMobileDataEnabledMethod.invoke(iConnectivityManager, enabled);
+
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		}
+
 	}
 	//
 	// private void addFinishButtonListener() {
