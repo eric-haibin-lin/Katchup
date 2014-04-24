@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <dimen name="day_label_text_size">11sp</dimen>
     <dimen name="all_day_bottom_margin">8dip</dimen>
     <dimen name="one_day_header_height">0dip</dimen>
@@ -18,7 +19,7 @@
     <!-- margins size of hours column in day/week view -->
     <dimen name="hours_left_margin">20dip</dimen>
     <dimen name="hours_right_margin">4dip</dimen>
-    <!-- size of day header in day and week views  -->
+    <!-- size of day header in day and week views -->
     <dimen name="day_header_height">16dip</dimen>
     <dimen name="widget_day_num_size">36sp</dimen>
     <dimen name="widget_day_num_top_padding">-4dip</dimen>
@@ -39,7 +40,9 @@
     <dimen name="agenda_item_right_margin">4dip</dimen>
     <dimen name="today_icon_text_size">14sp</dimen>
     <dimen name="color_view_touch_area_increase">16dp</dimen>
-
     <dimen name="recurrence_picker_height">340dp</dimen>
     <dimen name="recurrence_picker_width">300dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
 </resources>

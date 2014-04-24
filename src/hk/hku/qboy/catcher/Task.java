@@ -116,6 +116,9 @@ public class Task {
 
 	public void addTrackRecord(String newRecord) {
 		this.newRecord = newRecord;
-		setRecord(this.record + " ~ " + newRecord);
+		if (!this.record.equals(""))
+			setRecord(this.record + ";" + newRecord);
+		else
+			setRecord(newRecord);
 	}
 }
