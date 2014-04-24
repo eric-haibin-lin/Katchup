@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	<color name="event_center">#ff6bd697</color>
     <color name="week_saturday">#80333333</color>
     <color name="week_sunday">#80333333</color>
     <color name="calendar_future_bg_color">#ffffffff</color>
