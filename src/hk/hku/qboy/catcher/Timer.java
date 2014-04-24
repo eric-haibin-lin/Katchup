@@ -2,23 +2,34 @@ package hk.hku.qboy.catcher;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
 import android.annotation.SuppressLint;
+import android.app.Service;
+import android.content.Intent;
+import android.os.Binder;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.SystemClock;
-import android.widget.TextView;
-import android.widget.Toast;
 
 @SuppressLint("SimpleDateFormat")
-public class Timer {
+public class Timer extends Service {
+
+	public final IBinder mBinder = new ServiceBinder();
+
+	public class ServiceBinder extends Binder {
+		Timer getService() {
+			return Timer.this;
+		}
+	}
 
 	private long startTime = 0L;
 	long timeInMilliseconds = 0L;
 	long timeSwapBuff = 0L;
 	long updatedTime = 0L;
 
-	boolean isCountingTime = false;
-	boolean keepCounting = true;
-	TextView timerValue;
+	public boolean isCountingTime = false;
+	public boolean keepCounting = true;
+	String timerValue;
 
 	private Handler customHandler = new Handler();
 	private Runnable updateTimerThread;
@@ -26,8 +37,15 @@ public class Timer {
 	String timeFrom;
 	String timeTo;
 
-	public Timer(TextView timerValue) {
-		this.timerValue = timerValue;
+	String title;
+
+	public int onStartCommand(Intent intent, int flags, int start) {
+		createRunnable();
+		return START_STICKY;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public void createRunnable() {
@@ -39,8 +57,13 @@ public class Timer {
 					int secs = (int) (updatedTime / 1000);
 					int mins = secs / 60;
 					secs = secs % 60;
-					timerValue.setText("" + mins + ":"
-							+ String.format("%02d", secs));
+					timerValue = ("" + mins + ":" + String.format("%02d", secs));
+
+					Intent i = new Intent("android.intent.action.TIMER");
+					i.putExtra("time", timerValue);
+					i.putExtra("title", title);
+					Timer.this.sendBroadcast(i);
+
 					customHandler.postDelayed(this, 0);
 				}
 			}
@@ -54,10 +77,10 @@ public class Timer {
 	}
 
 	public void start() {
-		startTime = SystemClock.uptimeMillis();
-		customHandler.postDelayed(updateTimerThread, 0);
 		isCountingTime = true;
 		keepCounting = true;
+		startTime = SystemClock.uptimeMillis();
+		customHandler.postDelayed(updateTimerThread, 0);
 		timeFrom = getCurrentTime();
 	}
 
@@ -71,15 +94,22 @@ public class Timer {
 	}
 
 	public String makeRecord() {
-		return timeFrom + " - " + timeTo;
+		return timeFrom + "/" + timeTo;
 	}
 
 	private String getCurrentTime() {
 		Calendar c = Calendar.getInstance();
 		System.out.println("Current time => " + c.getTime());
-		SimpleDateFormat df = new SimpleDateFormat("MM/dd HH:mm");
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
 		String formattedDate = df.format(c.getTime());
+		formattedDate = formattedDate.substring(0, 8) + "T"
+				+ formattedDate.substring(8);
 		return formattedDate;
+	}
+
+	@Override
+	public IBinder onBind(Intent intent) {
+		return mBinder;
 	}
 
 }
