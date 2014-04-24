@@ -31,9 +31,14 @@
         </service>
 
         <provider
-            android:name="TaskProvider"
+            android:name="hk.hku.qboy.catcher.TaskProvider"
             android:authorities="hk.hku.qboy.catcher.tasks" >
         </provider>
+
+        <activity
+            android:name="hk.hku.qboy.catcher.TimerActivity"
+            android:label="@string/title_activity_timer" >
+        </activity>
     </application>
 
 </manifest>
