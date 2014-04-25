@@ -39,5 +39,5 @@
     <color name="month_selected_week_bgcolor">#FFDDDDDD</color>
     <color name="month_today_bgcolor">#FFFFFFFF</color>
     <color name="month_bgcolor">#FFE5E5E5</color>
-
+	<color name="panel_text_foreground">#ffffffff</color>
 </resources>
