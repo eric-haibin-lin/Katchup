@@ -19,6 +19,8 @@ package hk.hku.qboy.catcher;
 //import com.android.calendar.CalendarController;
 //import com.android.calendar.EventLoader;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Formatter;
 import java.util.Locale;
@@ -36,6 +38,7 @@ import android.graphics.Typeface;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.os.Handler;
+import android.text.StaticLayout;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.text.format.Time;
@@ -136,6 +139,10 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 
 	private boolean mRemeasure = true;
 	private int[] mEarliestStartHour; // indexed by the week day offset
+	
+	private final EventLoader mEventLoader;
+    protected final EventGeometry mEventGeometry;
+    
 	/**
 	 * Flag to decide whether to handle the up event. Cases where up events
 	 * should be ignored are 1) right after a scale gesture and 2) finger was
@@ -242,7 +249,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 
 	// public DayView(Context context, CalendarController controller,
 	// ViewSwitcher viewSwitcher, EventLoader eventLoader, int numDays) {
-	public DayView(Context context, ViewSwitcher viewSwitcher, int numDays) {
+	public DayView(Context context, ViewSwitcher viewSwitcher, EventLoader eventLoader, int numDays) {
 		super(context);
 		mResources = context.getResources();
 		// mCreateNewEventString = mResources.getString(R.string.event_create);
@@ -254,12 +261,8 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 				.getDimension(R.dimen.date_header_text_size);
 		DAY_HEADER_FONT_SIZE = (int) mResources
 				.getDimension(R.dimen.day_label_text_size);
-		// ONE_DAY_HEADER_HEIGHT = (int)
-		// mResources.getDimension(R.dimen.one_day_header_height);
 		DAY_HEADER_BOTTOM_MARGIN = (int) mResources
 				.getDimension(R.dimen.day_header_bottom_margin);
-		// EXPAND_ALL_DAY_BOTTOM_MARGIN = (int)
-		// mResources.getDimension(R.dimen.all_day_bottom_margin);
 		HOURS_TEXT_SIZE = (int) mResources
 				.getDimension(R.dimen.hours_text_size);
 		AMPM_TEXT_SIZE = (int) mResources.getDimension(R.dimen.ampm_text_size);
@@ -309,11 +312,11 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		// mAcceptedOrTentativeEventBoxDrawable = mResources
 		// .getDrawable(R.drawable.panel_month_event_holo_light);
 
-		// mEventLoader = eventLoader;
-		// mEventGeometry = new EventGeometry();
-		// mEventGeometry.setMinEventHeight(MIN_EVENT_HEIGHT);
-		// mEventGeometry.setHourGap(HOUR_GAP);
-		// mEventGeometry.setCellMargin(DAY_GAP);
+		 mEventLoader = eventLoader;
+		 mEventGeometry = new EventGeometry();
+		 mEventGeometry.setMinEventHeight(MIN_EVENT_HEIGHT);
+		 mEventGeometry.setHourGap(HOUR_GAP);
+		 mEventGeometry.setCellMargin(DAY_GAP);
 		// mLongPressItems = new CharSequence[] {
 		// mResources.getString(R.string.new_event_dialog_option)
 		// };
@@ -907,7 +910,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		mGridAreaHeight = height - mFirstCell;
 
 		mNumHours = mGridAreaHeight / (mCellHeight + HOUR_GAP);
-		// TODO mEventGeometry.setHourHeight(mCellHeight);
+		mEventGeometry.setHourHeight(mCellHeight);
 
 		final long minimumDurationMillis = (long) (MIN_EVENT_HEIGHT
 				* DateUtils.MINUTE_IN_MILLIS / (mCellHeight / 60.0f));
@@ -1354,11 +1357,97 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		view = (DayView) mViewSwitcher.getCurrentView();
 		view.setSelected(newSelected);
 		view.requestFocus();
-		// TODO view.reloadEvents();
+		view.reloadEvents();
 		// view.updateTitle();
 		view.restartCurrentTimeUpdates();
 
 		return view;
+	}
+
+	/* package */ void reloadEvents() {
+        // Protect against this being called before this view has been
+        // initialized.
+//        if (mContext == null) {
+//            return;
+//        }
+
+//        setSelectedEvent(null);
+//        mPrevSelectedEvent = null;
+//        mSelectedEvents.clear();
+//
+//        // The start date is the beginning of the week at 12am
+//        Time weekStart = new Time();
+//        weekStart.set(mBaseDate);
+//        weekStart.hour = 0;
+//        weekStart.minute = 0;
+//        weekStart.second = 0;
+//        long millis = weekStart.normalize(true /* ignore isDst */);
+//
+//        // Avoid reloading events unnecessarily.
+//        if (millis == mLastReloadMillis) {
+//            return;
+//        }
+//        mLastReloadMillis = millis;
+//
+//        // load events in the background
+////        mContext.startProgressSpinner();
+//        final ArrayList<Event> events = new ArrayList<Event>();
+//        mEventLoader.loadEventsInBackground(mNumDays, events, mFirstJulianDay, new Runnable() {
+//
+//            public void run() {
+//                boolean fadeinEvents = mFirstJulianDay != mLoadedFirstJulianDay;
+//                mEvents = events;
+//                mLoadedFirstJulianDay = mFirstJulianDay;
+//                if (mAllDayEvents == null) {
+//                    mAllDayEvents = new ArrayList<Event>();
+//                } else {
+//                    mAllDayEvents.clear();
+//                }
+//
+//                // Create a shorter array for all day events
+//                for (Event e : events) {
+//                    if (e.drawAsAllday()) {
+//                        mAllDayEvents.add(e);
+//                    }
+//                }
+//
+//                // New events, new layouts
+//                if (mLayouts == null || mLayouts.length < events.size()) {
+//                    mLayouts = new StaticLayout[events.size()];
+//                } else {
+//                    Arrays.fill(mLayouts, null);
+//                }
+//
+//                if (mAllDayLayouts == null || mAllDayLayouts.length < mAllDayEvents.size()) {
+//                    mAllDayLayouts = new StaticLayout[events.size()];
+//                } else {
+//                    Arrays.fill(mAllDayLayouts, null);
+//                }
+//
+//                computeEventRelations();
+//
+//                mRemeasure = true;
+//                mComputeSelectedEvents = true;
+//                recalc();
+//
+//                // Start animation to cross fade the events
+//                if (fadeinEvents) {
+//                    if (mEventsCrossFadeAnimation == null) {
+//                        mEventsCrossFadeAnimation =
+//                                ObjectAnimator.ofInt(DayView.this, "EventsAlpha", 0, 255);
+//                        mEventsCrossFadeAnimation.setDuration(EVENTS_CROSS_FADE_DURATION);
+//                    }
+//                    mEventsCrossFadeAnimation.start();
+//                } else{
+//                    invalidate();
+//                }
+//            }
+//        }, mCancelCallback);
+    }
+
+	private void setSelectedEvent(Object object) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/**
@@ -1387,6 +1476,11 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     }
 
 	private static final int MINIMUM_SNAP_VELOCITY = 2200;
+	/* package */ static final int MINUTES_PER_HOUR = 60;
+    /* package */ static final int MINUTES_PER_DAY = MINUTES_PER_HOUR * 24;
+    /* package */ static final int MILLIS_PER_MINUTE = 60 * 1000;
+    /* package */ static final int MILLIS_PER_HOUR = (3600 * 1000);
+    /* package */ static final int MILLIS_PER_DAY = MILLIS_PER_HOUR * 24;
 
 	private class ScrollInterpolator implements Interpolator {
 		public ScrollInterpolator() {
