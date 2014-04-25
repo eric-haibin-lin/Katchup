@@ -40,4 +40,6 @@
     <color name="month_today_bgcolor">#FFFFFFFF</color>
     <color name="month_bgcolor">#FFE5E5E5</color>
 	<color name="panel_text_foreground">#ffffffff</color>
+	<color name="titlebackgroundcolor">#FFFFFF</color>
+	<color name="titletextcolor">#000000</color>
 </resources>
