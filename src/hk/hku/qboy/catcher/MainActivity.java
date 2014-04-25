@@ -1,55 +1,48 @@
 package hk.hku.qboy.catcher;
-
+ 
 import android.net.Uri;
 import android.os.Bundle;
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TabHost;
+import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.ListFragment;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTabHost;
 
-public class MainActivity extends ListActivity {
-	static private final Uri tasks_provider = TaskProvider.CONTENT_URI;
-
+public class MainActivity extends FragmentActivity {
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main1);
-		
-		setListAdapter();
-		addTaskButtonListener();
-	}
+	    super.onCreate(savedInstanceState);
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
+	    setContentView(R.layout.main);
+	    FragmentTabHost tabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
 
-	private void addTaskButtonListener() {
-		final Button add_button = (Button) findViewById(R.id.button1);
-		// Add task button
-		View.OnClickListener add_button_on_click_listener = new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this, TaskDetail.class);
-				startActivity(intent);
-			}
-		};
-		add_button.setOnClickListener(add_button_on_click_listener);
-	}
+	    tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
+	
 
-	private void setListAdapter() {
-		Cursor cursor = managedQuery(tasks_provider, null, null, null, null);
-		TaskCursorAdapter taskAdapter = new TaskCursorAdapter(this, cursor);
-		this.setListAdapter(taskAdapter);
-	}
+	//1
+	tabHost.addTab(tabHost.newTabSpec("Tasks").setIndicator("Tasks"),taskFragment.class,null);
+	//2
+    tabHost.addTab(tabHost.newTabSpec("Calendar").setIndicator("Calendar"),DayFragment.class,null);
 
-	public void taskStart(String currentTitle) {
-		Intent timerIntent = new Intent(this, TimerActivity.class);
-		timerIntent.putExtra("title", currentTitle);
-		startActivity(timerIntent);
 	}
-
 }

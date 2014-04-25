@@ -28,7 +28,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 	public void bindView(View view, Context context, Cursor cursor) {
 		getDataFromCursor(cursor);
 		addOnClickListener(view, currentTitle);
-		addStartClickListener(view);
+	//	addStartClickListener(view);
 		updateDataInListView(view);
 		main = (MainActivity) context;
 
@@ -52,11 +52,13 @@ public class TaskCursorAdapter extends CursorAdapter {
 		final String title = currentTitle;
 		View.OnClickListener edit_button_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
-				main.taskStart(title);
+				//main.taskStart(title);
 			}
 		};
 		startButton.setOnClickListener(edit_button_on_click_listener);
 	}
+	
+	
 
 	private void updateDataInListView(View view) {
 		TextView title = (TextView) view.findViewById(R.id.title);
