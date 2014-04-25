@@ -81,6 +81,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 
 	private void addOnClickListener(View view, String currentTitle) {
 		Button editButton = (Button) view.findViewById(R.id.edit);
+		editButton.setBackgroundResource(R.drawable.edit);
 		final String title = currentTitle;
 		View.OnClickListener edit_button_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
