@@ -18,6 +18,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 	String currentColor;
 	String isUrgent;
 	MainActivity main;
+	int completed = 0;
 
 	public TaskCursorAdapter(Context context, Cursor c) {
 		super(context, c);
@@ -41,21 +42,27 @@ public class TaskCursorAdapter extends CursorAdapter {
 				.getColumnIndex(TaskProvider.COLOR));
 		int urgentValue = cursor.getInt(cursor
 				.getColumnIndex(TaskProvider.URGENT));
+
 		isUrgent = urgentValue > 0 ? "Urgent" : "Not Urgent";
+		completed = cursor
+				.getInt(cursor.getColumnIndex(TaskProvider.COMPLETED));
+		Log.d("CURSOR_ADAPTER",
+				currentTitle + " completed: " + String.valueOf(completed));
 
 	}
 
+	// Start timer when click on task title
 	private void addStartClickListener(View view) {
-		Button startButton = (Button) view.findViewById(R.id.startButton);
+		TextView title_text = (TextView) view.findViewById(R.id.title);
 		final String title = currentTitle;
-		View.OnClickListener edit_button_on_click_listener = new View.OnClickListener() {
+		View.OnClickListener start_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent timerIntent = new Intent(main, TimerActivity.class);
 				timerIntent.putExtra("title", title);
 				main.startActivity(timerIntent);
 			}
 		};
-		startButton.setOnClickListener(edit_button_on_click_listener);
+		title_text.setOnClickListener(start_on_click_listener);
 	}
 
 	private void updateDataInListView(View view) {
@@ -69,6 +76,8 @@ public class TaskCursorAdapter extends CursorAdapter {
 	}
 
 	@Override
+	// For every record provided by the cursor, it calls newView, which calls
+	// bindView.
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		LayoutInflater inflater = LayoutInflater.from(context);
 		View v = inflater.inflate(R.layout.list, parent, false);

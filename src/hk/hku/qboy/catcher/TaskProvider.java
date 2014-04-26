@@ -28,7 +28,8 @@ public class TaskProvider extends ContentProvider {
 	public static final String URGENT = "urgent";
 	public static final String STATUS = "status";
 	public static final String RECORD = "record";
-
+	public static final String COMPLETED = "completed";
+	
 	private static final int TASKS = 1;
 	private static final int TASK_ID = 2;
 
@@ -50,7 +51,7 @@ public class TaskProvider extends ContentProvider {
 	private static final String DATABASE_CREATE = "create table "
 			+ DATABASE_TABLE + " (" + _ID
 			+ " integer primary key autoincrement, " + TITLE
-			+ " text not null, " + DDL + " text not null, " + RECORD
+			+ " text not null, " + COMPLETED + " int not null, " + DDL + " text not null, " + RECORD
 			+ " text not null, " + URGENT + " int not null, " + COLOR
 			+ " text not null);";
 
