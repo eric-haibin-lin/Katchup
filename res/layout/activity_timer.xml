@@ -8,31 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".TimerActivity" >
 
-    <TextView
-        android:id="@+id/taskText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="Current task" />
-
-    <TextView
-        android:id="@+id/timerValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="110dp"
-        android:text="0:00" />
-
-    <Button
-        android:id="@+id/startButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Start/Pause" />
-
     <CheckBox
         android:id="@+id/wifiBox"
         android:layout_width="wrap_content"
@@ -42,7 +17,6 @@
         android:layout_marginTop="67dp"
         android:text="Turn off Wifi" />
 
-
     <CheckBox
         android:id="@+id/cellularBox"
         android:layout_width="wrap_content"
@@ -50,5 +24,31 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/wifiBox"
         android:text="Turn off Cellular data" />
+
+    <TextView
+        android:id="@+id/taskText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp"
+        android:text="Current task" />
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timerValue"
+        android:layout_centerHorizontal="true"
+        android:text="Start/Pause" />
+
+    <TextView
+        android:id="@+id/timerValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/taskText"
+        android:layout_centerHorizontal="true"
+        android:text="0:00"
+        android:textSize="100dip" />
 
 </RelativeLayout>

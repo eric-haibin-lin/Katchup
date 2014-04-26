@@ -28,7 +28,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 	public void bindView(View view, Context context, Cursor cursor) {
 		getDataFromCursor(cursor);
 		addOnClickListener(view, currentTitle);
-	//	addStartClickListener(view);
+		addStartClickListener(view);
 		updateDataInListView(view);
 		main = (MainActivity) context;
 
@@ -37,10 +37,8 @@ public class TaskCursorAdapter extends CursorAdapter {
 	private void getDataFromCursor(Cursor cursor) {
 		currentTitle = cursor.getString(cursor
 				.getColumnIndex(TaskProvider.TITLE));
-
 		currentColor = cursor.getString(cursor
 				.getColumnIndex(TaskProvider.COLOR));
-
 		int urgentValue = cursor.getInt(cursor
 				.getColumnIndex(TaskProvider.URGENT));
 		isUrgent = urgentValue > 0 ? "Urgent" : "Not Urgent";
@@ -52,13 +50,13 @@ public class TaskCursorAdapter extends CursorAdapter {
 		final String title = currentTitle;
 		View.OnClickListener edit_button_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
-				//main.taskStart(title);
+				Intent timerIntent = new Intent(main, TimerActivity.class);
+				timerIntent.putExtra("title", title);
+				main.startActivity(timerIntent);
 			}
 		};
 		startButton.setOnClickListener(edit_button_on_click_listener);
 	}
-	
-	
 
 	private void updateDataInListView(View view) {
 		TextView title = (TextView) view.findViewById(R.id.title);
@@ -73,7 +71,6 @@ public class TaskCursorAdapter extends CursorAdapter {
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		LayoutInflater inflater = LayoutInflater.from(context);
-
 		View v = inflater.inflate(R.layout.list, parent, false);
 		bindView(v, context, cursor);
 		return v;

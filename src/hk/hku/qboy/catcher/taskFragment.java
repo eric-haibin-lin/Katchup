@@ -19,19 +19,20 @@ import android.widget.TextView;
 
 public class taskFragment extends ListFragment {
 	static private final Uri tasks_provider = TaskProvider.CONTENT_URI;
-	//Context context = getActivity();
+	// Context context = getActivity();
 	View V;
+
 	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        V = inflater.inflate(R.layout.main1, container, false);
-        setListAdapter();
-        addTaskButtonListener();
-        
-        return V;
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// Inflate the layout for this fragment
+		V = inflater.inflate(R.layout.main1, container, false);
+		setListAdapter();
+		addTaskButtonListener();
+
+		return V;
 	}
-	
+
 	private void addTaskButtonListener() {
 		final Button add_button = (Button) V.findViewById(R.id.button1);
 		add_button.setBackgroundResource(R.drawable.plus);
@@ -46,15 +47,13 @@ public class taskFragment extends ListFragment {
 	}
 
 	private void setListAdapter() {
-		//Cursor c = context.getContentResolver().query(uri, projection, selection, null, sortOrder);
-		Cursor cursor = getActivity().getContentResolver().query(tasks_provider, null, null, null, null);
-		TaskCursorAdapter taskAdapter = new TaskCursorAdapter(getActivity(), cursor);
+		// Cursor c = context.getContentResolver().query(uri, projection,
+		// selection, null, sortOrder);
+		Cursor cursor = getActivity().getContentResolver().query(
+				tasks_provider, null, null, null, null);
+		TaskCursorAdapter taskAdapter = new TaskCursorAdapter(getActivity(),
+				cursor);
 		this.setListAdapter(taskAdapter);
 	}
-	
-	public void taskStart(String currentTitle) {
-		Intent timerIntent = new Intent(getActivity(), TimerActivity.class);
-		timerIntent.putExtra("title", currentTitle);
-		startActivity(timerIntent);
-	}
+
 }

@@ -8,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -32,20 +31,24 @@ public class TimerActivity extends Activity {
 	private BroadcastReceiver mReceiver;
 	private boolean mIsBound = false;
 	public Timer timer;
+	IntentFilter intentFilter;
+	public ServiceConnection Scon;
 
-	public ServiceConnection Scon = new ServiceConnection() {
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder binder) {
-			timer = ((Timer.ServiceBinder) binder).getService();
-			Log.d("SERVICE", "On bind, get service;");
-			timer.setTitle(title);
-		}
+	void createConnection() {
+		Scon = new ServiceConnection() {
+			@Override
+			public void onServiceConnected(ComponentName name, IBinder binder) {
+				timer = ((Timer.ServiceBinder) binder).getService();
+				Log.d("SERVICE", "On bind, get service;");
+				timer.setTitle(title);
+			}
 
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-			timer = null;
-		}
-	};
+			@Override
+			public void onServiceDisconnected(ComponentName name) {
+				timer = null;
+			}
+		};
+	}
 
 	void doBindService(Intent i) {
 		Log.d("BIND", "doBind");
@@ -64,13 +67,13 @@ public class TimerActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_timer);
+
+		createConnection();
 		addTimerButtonListener();
 		registerTimerReceiver();
-		// addFinishButtonListener();
 		Intent i = getIntent();
 		title = i.getStringExtra("title");
 		Log.d("Timer Activity", "title is " + title);
-
 		setCurrentTaskText(title);
 		task = new Task(this, title);
 
@@ -88,29 +91,17 @@ public class TimerActivity extends Activity {
 		startButton = (Button) findViewById(R.id.startButton);
 
 		Intent timerService = new Intent(this, Timer.class);
-
 		doBindService(timerService);
 		startService(timerService);
 
 		startButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				if (timer.isCountingTime) {
-					timer.finish();
-					if (task != null) {
-						String newTimerRecord = timer.makeRecord();
-						task.addTrackRecord(newTimerRecord);
-						task.update();
-					}
-					resetSettings();
-					Intent i = new Intent(TimerActivity.this,
-							MainActivity.class);
-					startActivity(i);
-
+					finish();
 				} else {
 					if (task != null) {
 						timer.start();
 						checkSettings();
-
 					}
 				}
 			}
@@ -118,8 +109,7 @@ public class TimerActivity extends Activity {
 	}
 
 	private void registerTimerReceiver() {
-		IntentFilter intentFilter = new IntentFilter(
-				"android.intent.action.TIMER");
+		intentFilter = new IntentFilter("android.intent.action.TIMER");
 		mReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
@@ -141,7 +131,6 @@ public class TimerActivity extends Activity {
 		taskText.setText(currentTitle);
 	}
 
-	@SuppressWarnings("deprecation")
 	private void checkSettings() {
 		final CheckBox wifiBox = (CheckBox) findViewById(R.id.wifiBox);
 		final CheckBox cellularBox = (CheckBox) findViewById(R.id.cellularBox);
@@ -150,7 +139,6 @@ public class TimerActivity extends Activity {
 			WifiManager wifiManager = (WifiManager) this
 					.getSystemService(Context.WIFI_SERVICE);
 			wifiManager.setWifiEnabled(false);
-
 		}
 
 		if (cellularBox.isChecked()) {
@@ -167,13 +155,10 @@ public class TimerActivity extends Activity {
 			WifiManager wifiManager = (WifiManager) this
 					.getSystemService(Context.WIFI_SERVICE);
 			wifiManager.setWifiEnabled(true);
-
 		}
-
 		if (cellularBox.isChecked()) {
 			setMobileDataEnabled(true);
 		}
-
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -192,9 +177,7 @@ public class TimerActivity extends Activity {
 					.forName(iConnectivityManager.getClass().getName());
 			final Method setMobileDataEnabledMethod = iConnectivityManagerClass
 					.getDeclaredMethod("setMobileDataEnabled", Boolean.TYPE);
-
 			setMobileDataEnabledMethod.setAccessible(true);
-
 			setMobileDataEnabledMethod.invoke(iConnectivityManager, enabled);
 
 		} catch (IllegalAccessException e) {
@@ -210,17 +193,20 @@ public class TimerActivity extends Activity {
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		}
-
 	}
-	//
-	// private void addFinishButtonListener() {
-	// Button finishButton = (Button) findViewById(R.id.finishButton);
-	// finishButton.setOnClickListener(new View.OnClickListener() {
-	// public void onClick(View view) {
-	// timer.finish();
-	// timerValue.setText("0:00");
-	// }
-	// });
-	// };
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		this.unregisterReceiver(mReceiver);
+		timer.finish();
+		if (task != null) {
+			String newTimerRecord = timer.makeRecord();
+			task.addTrackRecord(newTimerRecord);
+			task.update();
+		}
+		doUnbindService();
+		resetSettings();
+	}
 
 }
