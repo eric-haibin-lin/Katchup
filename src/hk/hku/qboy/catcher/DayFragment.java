@@ -48,6 +48,7 @@ public class DayFragment extends Fragment implements ViewFactory {
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         mSelectedDay.setToNow();
         view.setSelected(mSelectedDay);
+        view.reloadEvents();
         return view;
 	}
 
@@ -56,7 +57,7 @@ public class DayFragment extends Fragment implements ViewFactory {
         super.onResume();
         mEventLoader.startBackgroundThread();
 //        mTZUpdater.run();
-//        eventsChanged();
+        eventsChanged();
         DayView view = (DayView) mViewSwitcher.getCurrentView();
         view.handleOnResume();
         view.restartCurrentTimeUpdates();

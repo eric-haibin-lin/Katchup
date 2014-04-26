@@ -174,7 +174,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 	private static int DAY_HEADER_BOTTOM_MARGIN = 3;
 	private static float DAY_HEADER_FONT_SIZE = 14;
 	private static float DATE_HEADER_FONT_SIZE = 32;
-	private static int DEFAULT_CELL_HEIGHT = 64;
+	private static int DEFAULT_CELL_HEIGHT = 100;
 
 	private static final int TOUCH_MODE_VSCROLL = 0x20;
 	private static final int TOUCH_MODE_HSCROLL = 0x40;
@@ -187,7 +187,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 	 */
 	private static int MULTI_DAY_HEADER_HEIGHT = DAY_HEADER_HEIGHT;
 	// smallest height to draw an event with
-	private static float MIN_EVENT_HEIGHT = 24.0F; // in pixels
+	private static float MIN_EVENT_HEIGHT = 34.0F; // in pixels
 	private static final int GOTO_SCROLL_DURATION = 200;
 	private static final long ANIMATION_DURATION = 400;
 
@@ -232,6 +232,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 	private static final int EVENT_RECT_RIGHT_MARGIN = 0;
 	private static final int MAX_EVENT_TEXT_LEN = 500;
 	private static int MIN_CELL_WIDTH_FOR_TEXT = 20;
+	private static int MIN_CELL_HEIGHT_FOR_TEXT = 10;
 	private static int EVENT_RECT_TOP_MARGIN = 1;
 	private static int EVENT_RECT_BOTTOM_MARGIN = 0;
 	private static int EVENT_RECT_LEFT_MARGIN = 1;
@@ -874,7 +875,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
         int height = rect.bottom - rect.top;
 
         // If the rectangle is too small for text, then return
-        if (eventLayout == null || width < MIN_CELL_WIDTH_FOR_TEXT) {
+        if (eventLayout == null || width < MIN_CELL_WIDTH_FOR_TEXT || height < MIN_CELL_HEIGHT_FOR_TEXT) {
             return;
         }
 
@@ -1236,9 +1237,10 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		mNumHours = mGridAreaHeight / (mCellHeight + HOUR_GAP);
 		mEventGeometry.setHourHeight(mCellHeight);
 
-		final long minimumDurationMillis = (long) (MIN_EVENT_HEIGHT
-				* DateUtils.MINUTE_IN_MILLIS / (mCellHeight / 60.0f));
-		Event.computePositions(mEvents, minimumDurationMillis);
+//		final long minimumDurationMillis = (long) (MIN_EVENT_HEIGHT
+//				* DateUtils.MINUTE_IN_MILLIS / (mCellHeight / 60.0f));
+//		Event.computePositions(mEvents, minimumDurationMillis);
+		Event.computePositions(mEvents, 0);
 
 		// Compute the top of our reachable view
 		mMaxViewStartY = HOUR_GAP + 24 * (mCellHeight + HOUR_GAP)
