@@ -28,23 +28,23 @@ public class taskFragment extends ListFragment {
 		// Inflate the layout for this fragment
 		V = inflater.inflate(R.layout.main1, container, false);
 		setListAdapter();
-		addTaskButtonListener();
+//		addTaskButtonListener();
 
 		return V;
 	}
 
-	private void addTaskButtonListener() {
-		final Button add_button = (Button) V.findViewById(R.id.button1);
-		add_button.setBackgroundResource(R.drawable.plus);
-		// Add task button
-		View.OnClickListener add_button_on_click_listener = new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(getActivity(), CreateTask.class);
-				startActivity(intent);
-			}
-		};
-		add_button.setOnClickListener(add_button_on_click_listener);
-	}
+//	private void addTaskButtonListener() {
+//		final Button add_button = (Button) V.findViewById(R.id.button1);
+//		add_button.setBackgroundResource(R.drawable.plus);
+//		// Add task button
+//		View.OnClickListener add_button_on_click_listener = new View.OnClickListener() {
+//			public void onClick(View v) {
+//				Intent intent = new Intent(getActivity(), CreateTask.class);
+//				startActivity(intent);
+//			}
+//		};
+//		add_button.setOnClickListener(add_button_on_click_listener);
+//	}
 
 	private void setListAdapter() {
 		// Cursor c = context.getContentResolver().query(uri, projection,
