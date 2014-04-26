@@ -174,7 +174,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 	private static int DAY_HEADER_BOTTOM_MARGIN = 3;
 	private static float DAY_HEADER_FONT_SIZE = 14;
 	private static float DATE_HEADER_FONT_SIZE = 32;
-	private static int DEFAULT_CELL_HEIGHT = 100;
+	private static int DEFAULT_CELL_HEIGHT = 80;
 
 	private static final int TOUCH_MODE_VSCROLL = 0x20;
 	private static final int TOUCH_MODE_HSCROLL = 0x40;
@@ -292,6 +292,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 	private final Rect mSelectionRect = new Rect();
 	private Event mClickedEvent; // The event the user clicked on
 	private final Pattern drawTextSanitizerFilter = Pattern.compile("[\t\n],");
+	private float EVENT_TEXT_FONT_SIZE;
 	private static int mEventTextColor;
 	private static int mPressedColor;
 	private static int mClickedColor;
@@ -326,21 +327,20 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 				.getDimension(R.dimen.day_header_height);
 		int eventTextSizeId;
 		eventTextSizeId = R.dimen.week_view_event_text_size;
-		// EVENT_TEXT_FONT_SIZE = (int)
-		// mResources.getDimension(eventTextSizeId);
+		EVENT_TEXT_FONT_SIZE = (int) mResources.getDimension(eventTextSizeId);
 		// NEW_EVENT_HINT_FONT_SIZE = (int)
 		// mResources.getDimension(R.dimen.new_event_hint_text_size);
 		MIN_EVENT_HEIGHT = mResources.getDimension(R.dimen.event_min_height);
 		// MIN_UNEXPANDED_ALLDAY_EVENT_HEIGHT = MIN_EVENT_HEIGHT;
-		// EVENT_TEXT_TOP_MARGIN = (int)
-		// mResources.getDimension(R.dimen.event_text_vertical_margin);
-		// EVENT_TEXT_BOTTOM_MARGIN = EVENT_TEXT_TOP_MARGIN;
+		EVENT_TEXT_TOP_MARGIN = (int) mResources
+				.getDimension(R.dimen.event_text_vertical_margin);
+		EVENT_TEXT_BOTTOM_MARGIN = EVENT_TEXT_TOP_MARGIN;
 		// EVENT_ALL_DAY_TEXT_TOP_MARGIN = EVENT_TEXT_TOP_MARGIN;
 		// EVENT_ALL_DAY_TEXT_BOTTOM_MARGIN = EVENT_TEXT_TOP_MARGIN;
 		//
-		// EVENT_TEXT_LEFT_MARGIN = (int) mResources
-		// .getDimension(R.dimen.event_text_horizontal_margin);
-		// EVENT_TEXT_RIGHT_MARGIN = EVENT_TEXT_LEFT_MARGIN;
+		EVENT_TEXT_LEFT_MARGIN = (int) mResources
+				.getDimension(R.dimen.event_text_horizontal_margin);
+		EVENT_TEXT_RIGHT_MARGIN = EVENT_TEXT_LEFT_MARGIN;
 		// EVENT_ALL_DAY_TEXT_LEFT_MARGIN = EVENT_TEXT_LEFT_MARGIN;
 		// EVENT_ALL_DAY_TEXT_RIGHT_MARGIN = EVENT_TEXT_LEFT_MARGIN;
 
@@ -435,14 +435,14 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		// mPressedColor = mResources.getColor(R.color.pressed);
 		// mClickedColor =
 		// mResources.getColor(R.color.day_event_clicked_background_color);
-		// mEventTextColor =
-		// mResources.getColor(R.color.calendar_event_text_color);
+		mEventTextColor = mResources
+				.getColor(R.color.calendar_event_text_color);
 		// mMoreEventsTextColor =
 		// mResources.getColor(R.color.month_event_other_color);
 
-		// mEventTextPaint.setTextSize(EVENT_TEXT_FONT_SIZE);
-		// mEventTextPaint.setTextAlign(Paint.Align.LEFT);
-		// mEventTextPaint.setAntiAlias(true);
+		mEventTextPaint.setTextSize(EVENT_TEXT_FONT_SIZE);
+		mEventTextPaint.setTextAlign(Paint.Align.LEFT);
+		mEventTextPaint.setAntiAlias(true);
 
 		int gridLineColor = mResources
 				.getColor(R.color.calendar_grid_line_highlight_color);
@@ -815,11 +815,11 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		int cellHeight = mCellHeight;
 
 		// Use the selected hour as the selection region
-		Rect selectionArea = mSelectionRect;
-		selectionArea.top = top + mSelectionHour * (cellHeight + HOUR_GAP);
-		selectionArea.bottom = selectionArea.top + cellHeight;
-		selectionArea.left = left;
-		selectionArea.right = selectionArea.left + cellWidth;
+//		Rect selectionArea = mSelectionRect;
+//		selectionArea.top = top + mSelectionHour * (cellHeight + HOUR_GAP);
+//		selectionArea.bottom = selectionArea.top + cellHeight;
+//		selectionArea.left = left;
+//		selectionArea.right = selectionArea.left + cellWidth;
 
 		final ArrayList<Event> events = mEvents;
 		int numEvents = events.size();
@@ -840,10 +840,10 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 				continue;
 			}
 
-			if (date == mSelectionDay && mComputeSelectedEvents
-					&& geometry.eventIntersectsSelection(event, selectionArea)) {
-				mSelectedEvents.add(event);
-			}
+//			if (date == mSelectionDay && mComputeSelectedEvents
+//					&& geometry.eventIntersectsSelection(event, selectionArea)) {
+//				mSelectedEvents.add(event);
+//			}
 
 			Rect r = drawEventRect(event, canvas, p, eventTextPaint,
 					mViewStartY, viewEndY);
@@ -867,53 +867,58 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		}
 	}
 
-	private void drawEventText(StaticLayout eventLayout, Rect rect, Canvas canvas, int top,
-            int bottom, boolean center) {
-        // drawEmptyRect(canvas, rect, 0xFFFF00FF); // for debugging
+	private void drawEventText(StaticLayout eventLayout, Rect rect,
+			Canvas canvas, int top, int bottom, boolean center) {
+		// drawEmptyRect(canvas, rect, 0xFFFF00FF); // for debugging
 
-        int width = rect.right - rect.left;
-        int height = rect.bottom - rect.top;
+		int width = rect.right - rect.left;
+		int height = rect.bottom - rect.top;
 
-        // If the rectangle is too small for text, then return
-        if (eventLayout == null || width < MIN_CELL_WIDTH_FOR_TEXT || height < MIN_CELL_HEIGHT_FOR_TEXT) {
-            return;
-        }
+		// If the rectangle is too small for text, then return
+		if (eventLayout == null || width < MIN_CELL_WIDTH_FOR_TEXT
+				|| height < MIN_CELL_HEIGHT_FOR_TEXT) {
+			return;
+		}
 
-        int totalLineHeight = 0;
-        int lineCount = eventLayout.getLineCount();
-        for (int i = 0; i < lineCount; i++) {
-            int lineBottom = eventLayout.getLineBottom(i);
-            if (lineBottom <= height) {
-                totalLineHeight = lineBottom;
-            } else {
-                break;
-            }
-        }
+		int totalLineHeight = 0;
+		int lineCount = eventLayout.getLineCount();
+		for (int i = 0; i < lineCount; i++) {
+			int lineBottom = eventLayout.getLineBottom(i);
+			if (lineBottom <= height) {
+				totalLineHeight = lineBottom;
+			} else {
+				break;
+			}
+		}
 
-        // + 2 is small workaround when the font is slightly bigger then the rect. This will
-        // still allow the text to be shown without overflowing into the other all day rects.
-        if (totalLineHeight == 0 || rect.top > bottom || rect.top + totalLineHeight + 2 < top) {
-            return;
-        }
+		// + 2 is small workaround when the font is slightly bigger then the
+		// rect. This will
+		// still allow the text to be shown without overflowing into the other
+		// all day rects.
+		if (totalLineHeight == 0 || rect.top > bottom
+				|| rect.top + totalLineHeight + 2 < top) {
+			return;
+		}
 
-        // Use a StaticLayout to format the string.
-        canvas.save();
-      //  canvas.translate(rect.left, rect.top + (rect.bottom - rect.top / 2));
-        int padding = center? (rect.bottom - rect.top - totalLineHeight) / 2 : 0;
-        canvas.translate(rect.left, rect.top + padding);
-        rect.left = 0;
-        rect.right = width;
-        rect.top = 0;
-        rect.bottom = totalLineHeight;
+		// Use a StaticLayout to format the string.
+		canvas.save();
+		// canvas.translate(rect.left, rect.top + (rect.bottom - rect.top / 2));
+		int padding = center ? (rect.bottom - rect.top - totalLineHeight) / 2
+				: 0;
+		canvas.translate(rect.left, rect.top + padding);
+		rect.left = 0;
+		rect.right = width;
+		rect.top = 0;
+		rect.bottom = totalLineHeight;
 
-        // There's a bug somewhere. If this rect is outside of a previous
-        // cliprect, this becomes a no-op. What happens is that the text draw
-        // past the event rect. The current fix is to not draw the staticLayout
-        // at all if it is completely out of bound.
-        canvas.clipRect(rect);
-        eventLayout.draw(canvas);
-        canvas.restore();
-    }
+		// There's a bug somewhere. If this rect is outside of a previous
+		// cliprect, this becomes a no-op. What happens is that the text draw
+		// past the event rect. The current fix is to not draw the staticLayout
+		// at all if it is completely out of bound.
+		canvas.clipRect(rect);
+		eventLayout.draw(canvas);
+		canvas.restore();
+	}
 
 	private void computeNeighbors() {
 		// TODO Auto-generated method stub
@@ -943,10 +948,10 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 						bob.length(), 0);
 				bob.append(' ');
 			}
-			if (event.location != null) {
-				bob.append(drawTextSanitizer(event.location.toString(),
-						MAX_EVENT_TEXT_LEN - bob.length()));
-			}
+			// if (event.location != null) {
+			// bob.append(drawTextSanitizer(event.location.toString(),
+			// MAX_EVENT_TEXT_LEN - bob.length()));
+			// }
 
 			paint.setColor(mEventTextColor);
 
@@ -963,23 +968,23 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 	}
 
 	// Sanitize a string before passing it to drawText or else we get little
-    // squares. For newlines and tabs before a comma, delete the character.
-    // Otherwise, just replace them with a space.
-    private String drawTextSanitizer(String string, int maxEventTextLen) {
-        Matcher m = drawTextSanitizerFilter.matcher(string);
-        string = m.replaceAll(",");
+	// squares. For newlines and tabs before a comma, delete the character.
+	// Otherwise, just replace them with a space.
+	private String drawTextSanitizer(String string, int maxEventTextLen) {
+		Matcher m = drawTextSanitizerFilter.matcher(string);
+		string = m.replaceAll(",");
 
-        int len = string.length();
-        if (maxEventTextLen <= 0) {
-            string = "";
-            len = 0;
-        } else if (len > maxEventTextLen) {
-            string = string.substring(0, maxEventTextLen);
-            len = maxEventTextLen;
-        }
+		int len = string.length();
+		if (maxEventTextLen <= 0) {
+			string = "";
+			len = 0;
+		} else if (len > maxEventTextLen) {
+			string = string.substring(0, maxEventTextLen);
+			len = maxEventTextLen;
+		}
 
-        return string.replace('\n', ' ');
-    }
+		return string.replace('\n', ' ');
+	}
 
 	private void setupTextRect(Rect r) {
 		if (r.bottom <= r.top || r.right <= r.left) {
@@ -1225,6 +1230,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		// The min is where 24 hours cover the entire visible area
 		mMinCellHeight = Math.max((height - DAY_HEADER_HEIGHT) / 24,
 				(int) MIN_EVENT_HEIGHT);
+		Log.d(TAG, "" + mCellHeight);
 		if (mCellHeight < mMinCellHeight) {
 			mCellHeight = mMinCellHeight;
 		}
@@ -1237,10 +1243,10 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		mNumHours = mGridAreaHeight / (mCellHeight + HOUR_GAP);
 		mEventGeometry.setHourHeight(mCellHeight);
 
-//		final long minimumDurationMillis = (long) (MIN_EVENT_HEIGHT
-//				* DateUtils.MINUTE_IN_MILLIS / (mCellHeight / 60.0f));
-//		Event.computePositions(mEvents, minimumDurationMillis);
-		Event.computePositions(mEvents, 0);
+		 final long minimumDurationMillis = (long) (MIN_EVENT_HEIGHT
+		 * DateUtils.MINUTE_IN_MILLIS / (mCellHeight / 60.0f));
+		 Event.computePositions(mEvents, minimumDurationMillis);
+//		Event.computePositions(mEvents, 0);
 
 		// Compute the top of our reachable view
 		mMaxViewStartY = HOUR_GAP + 24 * (mCellHeight + HOUR_GAP)
@@ -1683,6 +1689,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		view = (DayView) mViewSwitcher.getCurrentView();
 		view.setSelected(newSelected);
 		view.requestFocus();
+		view.clearCachedEvents();
 		view.reloadEvents();
 		// view.updateTitle();
 		view.restartCurrentTimeUpdates();
@@ -2008,11 +2015,11 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 
 		if ((mTouchMode & TOUCH_MODE_HSCROLL) != 0) {
 			// Horizontal fling.
-			// initNextView(deltaX);
 			mTouchMode = TOUCH_MODE_INITIAL_STATE;
 			if (DEBUG)
 				Log.d(TAG, "doFling: velocityX " + velocityX);
 			int deltaX = (int) e2.getX() - (int) e1.getX();
+			initNextView(deltaX);
 			switchViews(deltaX < 0, mViewStartX, mViewWidth, velocityX);
 			mViewStartX = 0;
 			return;
@@ -2171,7 +2178,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		date.normalize(true /* ignore isDst */);
 		initView(view);
 		view.layout(getLeft(), getTop(), getRight(), getBottom());
-		view.reloadEvents();
 		return switchForward;
 	}
 
@@ -2203,6 +2209,8 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		// Redraw the screen so that the selection box will be redrawn. We may
 		// have scrolled to a different part of the day in some other view
 		// so the selection box in this view may no longer be visible.
+		view.clearCachedEvents();
+		view.reloadEvents();
 		view.recalc();
 	}
 

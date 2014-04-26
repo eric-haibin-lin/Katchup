@@ -35,6 +35,7 @@ public class DayFragment extends Fragment implements ViewFactory {
         mViewSwitcher.setFactory(this);
         mViewSwitcher.getCurrentView().requestFocus();
 //        ((DayView) mViewSwitcher.getCurrentView()).updateTitle();
+        eventsChanged();
 
         return v;
     }

@@ -18,7 +18,10 @@ package hk.hku.qboy.catcher;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.content.ContentResolver;
@@ -293,7 +296,23 @@ public class Event implements Cloneable {
 			buildEventsFromCursor(events, cEvents, context, startDay, endDay);
 			buildEventsFromCursor(events, cAllday, context, startDay, endDay);
 			buildTasksFromCursor(events, cTasks, context, startDay, endDay);
+			Collections.sort(events, new Comparator<Event>() {
+				@Override
+				public int compare(Event e1, Event e2) {
+					if (e1.startMillis < e2.startMillis)
+						return -1;
+					else if (e1.startMillis > e2.startMillis)
+						return 1;
+					else if (e1.endMillis < e2.endMillis)
+						return 1;
+					else if (e1.endMillis > e2.endMillis)
+						return -1;
+					else
+						return 0;
+				}
 
+			});
+			Log.d(TAG, "Built list " + events.toString());
 		} finally {
 			if (cEvents != null) {
 				cEvents.close();
@@ -329,7 +348,7 @@ public class Event implements Cloneable {
 		cTasks.moveToPosition(-1);
 		while (cTasks.moveToNext()) {
 			Event e = new Event();
-			e.id = cTasks.getLong(TASK_ID_INDEX);
+			// e.id = cTasks.getLong(TASK_ID_INDEX);
 			e.title = cTasks.getString(TASK_TITLE_INDEX);
 			e.allDay = false;
 
@@ -348,32 +367,41 @@ public class Event implements Cloneable {
 			e.isRepeating = false;
 			String[] records = cTasks.getString(TASK_RECORD_INDEX).split(";");
 			for (String record : records) {
-				Log.d(TAG, e.title+record);
+				Log.d(TAG, e.title + record);
 				try {
 					String[] p = record.split("/");
 					if (p[0].length() < 8 || p[1].length() < 8) {
 						continue;
 					}
 					e = (Event) e.clone();
-					Time start = new Time();
-					Time end = new Time();
+					Time start = new Time(TimeZone.getDefault()
+							.getDisplayName());
+					Time end = new Time(TimeZone.getDefault().getDisplayName());
 					start.parse(p[0]);
 					end.parse(p[1]);
 					e.startMillis = start.toMillis(false);
 					e.endMillis = end.toMillis(false);
+					Log.d(TAG, "gmtoff " + start.gmtoff + " " + end.gmtoff);
 					e.startDay = Time.getJulianDay(e.startMillis, start.gmtoff);
 					e.endDay = Time.getJulianDay(e.endMillis, end.gmtoff);
-					e.startTime = (int) ((e.startMillis - new Time()
+					e.startTime = (int) ((e.startMillis - new Time(TimeZone
+							.getDefault().getDisplayName())
 							.setJulianDay(e.startDay)) / 60000);
-					e.endTime = (int) ((e.endMillis - new Time()
+					e.endTime = (int) ((e.endMillis - new Time(TimeZone
+							.getDefault().getDisplayName())
 							.setJulianDay(e.endDay)) / 60000);
-					if(e.startTime==e.endTime){
+					if (e.startTime == e.endTime) {
 						e.endTime++;
 					}
+					Log.d(TAG,
+							e.title
+									+ String.format("%d %d, %d %d, %d %d",
+											e.startMillis, e.endMillis,
+											e.startDay, e.endDay, e.startTime,
+											e.endTime));
 					if (e.startDay > endDay || e.endDay < startDay) {
 						continue;
 					}
-					Log.d(TAG, e.title+String.format("%d %d, %d %d, %d %d",e.startMillis,e.endMillis,e.startDay,e.endDay,e.startTime,e.endTime));
 					events.add(e);
 				} catch (CloneNotSupportedException e1) {
 					e1.printStackTrace();
@@ -524,7 +552,11 @@ public class Event implements Cloneable {
 
 		e.selfAttendeeStatus = cEvents
 				.getInt(PROJECTION_SELF_ATTENDEE_STATUS_INDEX);
-		Log.d(TAG, e.title+String.format("%d %d, %d %d, %d %d",e.startMillis,e.endMillis,e.startDay,e.endDay,e.startTime,e.endTime));
+		Log.d(TAG,
+				e.title
+						+ String.format("%d %d, %d %d, %d %d", e.startMillis,
+								e.endMillis, e.startDay, e.endDay, e.startTime,
+								e.endTime));
 		return e;
 	}
 
@@ -553,14 +585,14 @@ public class Event implements Cloneable {
 
 		// Compute the column positions separately for the all-day events
 		doComputePositions(eventsList, minimumDurationMillis, false);
-		doComputePositions(eventsList, minimumDurationMillis, true);
+		// doComputePositions(eventsList, minimumDurationMillis, true);
 	}
 
 	private static void doComputePositions(ArrayList<Event> eventsList,
 			long minimumDurationMillis, boolean doAlldayEvents) {
 		final ArrayList<Event> activeList = new ArrayList<Event>();
 		final ArrayList<Event> groupList = new ArrayList<Event>();
-
+		Log.d(TAG, eventsList.toString());
 		if (minimumDurationMillis < 0) {
 			minimumDurationMillis = 0;
 		}
@@ -575,6 +607,7 @@ public class Event implements Cloneable {
 			if (!doAlldayEvents) {
 				colMask = removeNonAlldayActiveEvents(event,
 						activeList.iterator(), minimumDurationMillis, colMask);
+				Log.d(TAG, activeList.toString());
 			} else {
 				colMask = removeAlldayActiveEvents(event,
 						activeList.iterator(), colMask);
@@ -639,6 +672,11 @@ public class Event implements Cloneable {
 			if ((active.getStartMillis() + duration) <= start) {
 				colMask &= ~(1L << active.getColumn());
 				iter.remove();
+				Log.d(TAG, "active:" + active.getEndMillis() + " " + active
+						+ "event " + event + event.getStartMillis());
+			} else {
+				Log.d(TAG, "active:" + active.getEndMillis() + " " + active
+						+ "event " + event + event.getStartMillis());
 			}
 		}
 		return colMask;
@@ -755,5 +793,10 @@ public class Event implements Cloneable {
 	public boolean drawAsAllday() {
 		// Use >= so we'll pick up Exchange allday events
 		return allDay || endMillis - startMillis >= DateUtils.DAY_IN_MILLIS;
+	}
+
+	@Override
+	public String toString() {
+		return (String) title;
 	}
 }
