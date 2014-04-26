@@ -103,7 +103,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 	private static int mScaledPagingTouchSlop = 0;
 	private int mGridAreaHeight = -1;
 	private static int mCellHeight = 0; // shared among all DayViews
-	private static int mMinCellHeight = 32;
+	private static int mMinCellHeight = 1;
 
 	private float mGestureCenterHour = 0;
 
@@ -187,7 +187,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 	 */
 	private static int MULTI_DAY_HEADER_HEIGHT = DAY_HEADER_HEIGHT;
 	// smallest height to draw an event with
-	private static float MIN_EVENT_HEIGHT = 24.0F; // in pixels
+	private static float MIN_EVENT_HEIGHT = 1.0F; // in pixels
 	private static final int GOTO_SCROLL_DURATION = 200;
 	private static final long ANIMATION_DURATION = 400;
 

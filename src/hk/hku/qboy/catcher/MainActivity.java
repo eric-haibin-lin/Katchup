@@ -23,6 +23,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -33,14 +35,36 @@ import android.support.v4.app.FragmentTabHost;
 
 public class MainActivity extends FragmentActivity {
 	
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    // Inflate the menu items for use in the action bar
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main_activity, menu);
+	    return super.onCreateOptionsMenu(menu);
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle presses on the action bar items
+	    switch (item.getItemId()) {
+	        case R.id.action_add:
+	            newTask();
+	            return true;
+	        case R.id.action_setting:
+	            //composeMessage();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
+	private void newTask() {
+		Intent intent = new Intent(this, CreateTask.class);
+		startActivity(intent);
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    //getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
-	    ActionBar bar = getActionBar();
-	  //for color
-	  bar.hide();
-	   // getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.mytitle);
+	    
 	    setContentView(R.layout.main);
 	    FragmentTabHost tabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
 
@@ -51,6 +75,6 @@ public class MainActivity extends FragmentActivity {
 	tabHost.addTab(tabHost.newTabSpec("Tasks").setIndicator("Tasks"),taskFragment.class,null);
 	//2
     tabHost.addTab(tabHost.newTabSpec("Calendar").setIndicator("Calendar"),DayFragment.class,null);
-
+    
 	}
 }
