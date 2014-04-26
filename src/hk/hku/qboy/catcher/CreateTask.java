@@ -52,7 +52,6 @@ public class CreateTask extends Activity implements
 	int isUrgent;
 	String title;
 	String color;
-
 	String record;
 
 	@Override

@@ -34,35 +34,6 @@ public class TimerActivity extends Activity {
 	IntentFilter intentFilter;
 	public ServiceConnection Scon;
 
-	void createConnection() {
-		Scon = new ServiceConnection() {
-			@Override
-			public void onServiceConnected(ComponentName name, IBinder binder) {
-				timer = ((Timer.ServiceBinder) binder).getService();
-				Log.d("SERVICE", "On bind, get service;");
-				timer.setTitle(title);
-			}
-
-			@Override
-			public void onServiceDisconnected(ComponentName name) {
-				timer = null;
-			}
-		};
-	}
-
-	void doBindService(Intent i) {
-		Log.d("BIND", "doBind");
-		bindService(i, Scon, Context.BIND_AUTO_CREATE);
-		mIsBound = true;
-	}
-
-	void doUnbindService() {
-		if (mIsBound) {
-			unbindService(Scon);
-			mIsBound = false;
-		}
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,9 +52,39 @@ public class TimerActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.timer, menu);
 		return true;
+	}
+
+	// create a connection with the service binder
+	void createConnection() {
+		Scon = new ServiceConnection() {
+			@Override
+			public void onServiceConnected(ComponentName name, IBinder binder) {
+				timer = ((Timer.ServiceBinder) binder).getService();
+				Log.d("SERVICE", "On bind, get service;");
+				timer.setTitle(title);
+			}
+
+			@Override
+			public void onServiceDisconnected(ComponentName name) {
+				timer = null;
+			}
+		};
+	}
+
+	// bind service with current activity
+	void doBindService(Intent i) {
+		Log.d("BIND", "doBind");
+		bindService(i, Scon, Context.BIND_AUTO_CREATE);
+		mIsBound = true;
+	}
+
+	void doUnbindService() {
+		if (mIsBound) {
+			unbindService(Scon);
+			mIsBound = false;
+		}
 	}
 
 	private void addTimerButtonListener() {
@@ -140,11 +141,9 @@ public class TimerActivity extends Activity {
 					.getSystemService(Context.WIFI_SERVICE);
 			wifiManager.setWifiEnabled(false);
 		}
-
 		if (cellularBox.isChecked()) {
 			setMobileDataEnabled(false);
 		}
-
 	}
 
 	private void resetSettings() {
@@ -196,6 +195,7 @@ public class TimerActivity extends Activity {
 	}
 
 	@Override
+	// this is called either from back button or stop timer button.
 	protected void onDestroy() {
 		super.onDestroy();
 		this.unregisterReceiver(mReceiver);

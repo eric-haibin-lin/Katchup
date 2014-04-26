@@ -18,6 +18,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 	String currentColor;
 	String isUrgent;
 	MainActivity main;
+	int completed = 0;
 
 	public TaskCursorAdapter(Context context, Cursor c) {
 		super(context, c);
@@ -41,7 +42,12 @@ public class TaskCursorAdapter extends CursorAdapter {
 				.getColumnIndex(TaskProvider.COLOR));
 		int urgentValue = cursor.getInt(cursor
 				.getColumnIndex(TaskProvider.URGENT));
+
 		isUrgent = urgentValue > 0 ? "Urgent" : "Not Urgent";
+		completed = cursor
+				.getInt(cursor.getColumnIndex(TaskProvider.COMPLETED));
+		Log.d("CURSOR_ADAPTER",
+				currentTitle + " completed: " + String.valueOf(completed));
 
 	}
 
@@ -70,6 +76,8 @@ public class TaskCursorAdapter extends CursorAdapter {
 	}
 
 	@Override
+	// For every record provided by the cursor, it calls newView, which calls
+	// bindView.
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		LayoutInflater inflater = LayoutInflater.from(context);
 		View v = inflater.inflate(R.layout.list, parent, false);

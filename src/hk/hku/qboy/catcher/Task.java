@@ -22,6 +22,7 @@ public class Task {
 	private String ddl;
 	private String newRecord;
 	private String record = "";
+	private int completed = 0;
 
 	// Constructor
 	public Task(Activity activity, String title) {
@@ -68,6 +69,10 @@ public class Task {
 		return this.record;
 	}
 
+	public void setCompleted(int completed) {
+		this.completed = completed;
+	}
+
 	public int update() {
 		return this.taskModel.update(makeContent());
 	}
@@ -103,6 +108,7 @@ public class Task {
 		content_values.put(TaskProvider.COLOR, color);
 		content_values.put(TaskProvider.URGENT, urgent);
 		content_values.put(TaskProvider.RECORD, record);
+		content_values.put(TaskProvider.COMPLETED, completed);
 		return content_values;
 
 	}
@@ -112,6 +118,8 @@ public class Task {
 		Log.d("TASK_DEBUG", "DDL: " + this.ddl);
 		Log.d("TASK_DEBUG", "COLOR: " + this.color);
 		Log.d("TASK_DEBUG", "URGENT: " + this.urgent);
+		Log.d("TASK_DEBUG", "COMPELTED: " + this.completed);
+
 	}
 
 	public void addTrackRecord(String newRecord) {

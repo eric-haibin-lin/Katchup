@@ -50,7 +50,8 @@ public class taskFragment extends ListFragment {
 		// Cursor c = context.getContentResolver().query(uri, projection,
 		// selection, null, sortOrder);
 		Cursor cursor = getActivity().getContentResolver().query(
-				tasks_provider, null, null, null, null);
+				tasks_provider, null, TaskProvider.COMPLETED + " = 0", null,
+				TaskProvider.URGENT + " DESC");
 		TaskCursorAdapter taskAdapter = new TaskCursorAdapter(getActivity(),
 				cursor);
 		this.setListAdapter(taskAdapter);
