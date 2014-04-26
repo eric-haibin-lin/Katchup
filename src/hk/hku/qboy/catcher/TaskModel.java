@@ -26,8 +26,9 @@ public class TaskModel {
 	// update title
 	public int update(ContentValues content_values) {
 		String title = (String) content_values.get(TaskProvider.TITLE);
+		Integer id = (Integer) content_values.get(TaskProvider._ID);
 
-		Cursor cursor = find(title);
+		Cursor cursor = find(id);
 
 		int num_rows_updated = 0;
 
@@ -38,9 +39,9 @@ public class TaskModel {
 			}
 		} else {
 			try {
-				String selection_clause = TaskProvider.TITLE + " = ?";
+				String selection_clause = TaskProvider._ID + " = ?";
 				String[] selection_args = { "" };
-				selection_args[0] = title;
+				selection_args[0] = String.valueOf(id);
 				num_rows_updated = activity.getContentResolver().update(
 						books_provider, content_values, selection_clause,
 						selection_args);
@@ -56,20 +57,17 @@ public class TaskModel {
 	}
 
 	// find title
-	public Cursor find(String title) {
+	public Cursor find(int id) {
 		Cursor cursor = null;
-
-		if (TextUtils.isEmpty(title)) {
+		if (id == 0) {
 			cursor = null;
 		} else {
-			String selection_clause = TaskProvider.TITLE + " = ?";
+			String selection_clause = TaskProvider._ID + " = ?";
 			String[] selection_args = { "" };
-			selection_args[0] = title;
-
+			selection_args[0] = String.valueOf(id);
 			cursor = activity.getContentResolver().query(books_provider, null,
 					selection_clause, selection_args, null);
 		}
-
 		return cursor;
 	}
 

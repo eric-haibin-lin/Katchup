@@ -4,33 +4,39 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 import android.util.Log;
 
 @SuppressLint("ShowToast")
 public class Task {
 
-	static private final Uri books_provider = TaskProvider.CONTENT_URI;
-	static private String log_tag = "catcher";
-
-	private Activity activity;
 	private TaskModel taskModel;
 	private int urgent;
-
+	private int id;
 	private String title;
 	private String color;
 	private String ddl;
-	private String newRecord;
 	private String record = "";
 	private int completed = 0;
 
 	// Constructor
-	public Task(Activity activity, String title) {
-		this.title = title;
-		this.activity = activity;
+	public Task(Activity activity, int id) {
+		this.id = id;
 		this.taskModel = new TaskModel(activity);
 		queryFromDatabase();
 		return;
+	}
+
+	public Task(Activity activity) {
+		this.taskModel = new TaskModel(activity);
+		return;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getTitle() {
+		return title;
 	}
 
 	public void setDeadline(String ddl) {
@@ -78,14 +84,13 @@ public class Task {
 	}
 
 	public int insert() {
-		return this.taskModel.insert(makeContent());
-
+		return this.taskModel.insert(makeContentWithoutId());
 	}
 
 	public void queryFromDatabase() {
-		Cursor cursor = taskModel.find(title);
+		Cursor cursor = taskModel.find(id);
 		if (cursor.getCount() != 0) {
-			Log.d("Task", title + " found in db!");
+			Log.d("Task", String.valueOf(id) + title + " found in db!");
 			cursor.moveToNext();
 			setDeadline(cursor.getString(cursor
 					.getColumnIndex(TaskProvider.DDL)));
@@ -94,14 +99,15 @@ public class Task {
 			setUrgent(cursor.getInt(cursor.getColumnIndex(TaskProvider.URGENT)));
 			setRecord(cursor.getString(cursor
 					.getColumnIndex(TaskProvider.RECORD)));
-
+			setTitle(cursor
+					.getString(cursor.getColumnIndex(TaskProvider.TITLE)));
 			Log.d("Task", "Find record with ddl: " + ddl);
 		} else
 			Log.d("Task", title + " not found in db!");
 		return;
 	}
 
-	private ContentValues makeContent() {
+	private ContentValues makeContentWithoutId() {
 		ContentValues content_values = new ContentValues();
 		content_values.put(TaskProvider.TITLE, title);
 		content_values.put(TaskProvider.DDL, ddl);
@@ -109,8 +115,21 @@ public class Task {
 		content_values.put(TaskProvider.URGENT, urgent);
 		content_values.put(TaskProvider.RECORD, record);
 		content_values.put(TaskProvider.COMPLETED, completed);
-		return content_values;
 
+		return content_values;
+	}
+
+	private ContentValues makeContent() {
+		ContentValues content_values = new ContentValues();
+		content_values.put(TaskProvider._ID, id);
+		content_values.put(TaskProvider.TITLE, title);
+		content_values.put(TaskProvider.DDL, ddl);
+		content_values.put(TaskProvider.COLOR, color);
+		content_values.put(TaskProvider.URGENT, urgent);
+		content_values.put(TaskProvider.RECORD, record);
+		content_values.put(TaskProvider.COMPLETED, completed);
+
+		return content_values;
 	}
 
 	public void printDebugInfo() {
@@ -123,7 +142,6 @@ public class Task {
 	}
 
 	public void addTrackRecord(String newRecord) {
-		this.newRecord = newRecord;
 		if (!this.record.equals(""))
 			setRecord(this.record + ";" + newRecord);
 		else

@@ -27,6 +27,7 @@ public class TimerActivity extends Activity {
 	private TextView timerValue;
 	private Task task;
 
+	int id;
 	String title;
 	private BroadcastReceiver mReceiver;
 	private boolean mIsBound = false;
@@ -44,9 +45,10 @@ public class TimerActivity extends Activity {
 		registerTimerReceiver();
 		Intent i = getIntent();
 		title = i.getStringExtra("title");
+		id = i.getIntExtra("id_key", 0);
 		Log.d("Timer Activity", "title is " + title);
 		setCurrentTaskText(title);
-		task = new Task(this, title);
+		task = new Task(this, id);
 
 	}
 
@@ -119,7 +121,7 @@ public class TimerActivity extends Activity {
 				if (timerValue != null)
 					timerValue.setText(timeToDisplay);
 				if (task == null) {
-					task = new Task(TimerActivity.this, title);
+					task = new Task(TimerActivity.this, id);
 					setCurrentTaskText(title);
 				}
 			}

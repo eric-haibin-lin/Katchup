@@ -3,35 +3,23 @@ package hk.hku.qboy.catcher;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ContentValues;
-import android.content.Intent;
-import android.database.Cursor;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 @SuppressLint("SimpleDateFormat")
 public class CreateTask extends Activity implements
 		DatePicker.OnDateChangedListener {
-
-	static private final Uri books_provider = TaskProvider.CONTENT_URI;
-	static private String log_tag = "catcher";
-	static final int DATE_DIALOG_ID = 999;
 
 	EditText title_edit;
 	TextView color_view;
@@ -167,12 +155,12 @@ public class CreateTask extends Activity implements
 				String color = color_view.getText().toString();
 				String ddl = newYear + "-" + newMonth + "-" + newDay;
 
-				currentTask = new Task(CreateTask.this, title);
+				currentTask = new Task(CreateTask.this);
 				currentTask.setUrgent(isUrgent);
 				currentTask.setDeadline(ddl);
 				currentTask.setColor(color);
-
-				int num_rows_updated = currentTask.update();
+				currentTask.setTitle(title);
+				int num_rows_updated = currentTask.insert();
 				Log.d("CREATE", num_rows_updated + " task added");
 				finish();
 			}

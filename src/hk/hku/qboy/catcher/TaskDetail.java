@@ -1,38 +1,23 @@
 package hk.hku.qboy.catcher;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
-import android.net.Uri;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 @SuppressLint("SimpleDateFormat")
 public class TaskDetail extends Activity implements
 		DatePicker.OnDateChangedListener {
-
-	static private final Uri books_provider = TaskProvider.CONTENT_URI;
-	static private String log_tag = "catcher";
-	static final int DATE_DIALOG_ID = 999;
 
 	EditText title_edit;
 	TextView color_view;
@@ -50,7 +35,7 @@ public class TaskDetail extends Activity implements
 	int newYear;
 	int newMonth;
 	int newDay;
-
+	int id;
 	int isUrgent;
 	String title;
 	String color;
@@ -67,6 +52,7 @@ public class TaskDetail extends Activity implements
 		Intent intent = getIntent();
 		if (intent.hasExtra("title_key")) {
 			title = intent.getStringExtra("title_key");
+			id = intent.getIntExtra("id_key", 0);
 			fillInCurrentTaskData();
 		} else
 			Log.d("EDIT", "No intent passed");
@@ -101,7 +87,7 @@ public class TaskDetail extends Activity implements
 	// Read from database to set right attributes of this task
 	private void fillInCurrentTaskData() {
 		title_edit.setText(title);
-		currentTask = new Task(this, title);
+		currentTask = new Task(this, id);
 		String ddl = currentTask.getDeadline();
 		isUrgent = currentTask.getUrgent();
 		record = currentTask.getRecord();
@@ -121,6 +107,8 @@ public class TaskDetail extends Activity implements
 		task_list.setText(record);
 
 	}
+
+	// TODO: parse the history records and present it in a nice way
 
 	// parse the deadline string to get day, month, year.
 	private void parseDeadlineString(String ddl) {
@@ -155,27 +143,6 @@ public class TaskDetail extends Activity implements
 		return color_on_click_listener;
 	}
 
-	private String getCurrentYear() {
-		Calendar c = Calendar.getInstance();
-		SimpleDateFormat df = new SimpleDateFormat("yyyy");
-		String formattedDate = df.format(c.getTime());
-		return formattedDate;
-	}
-
-	private String getCurrentMonth() {
-		Calendar c = Calendar.getInstance();
-		SimpleDateFormat df = new SimpleDateFormat("MM");
-		String formattedDate = df.format(c.getTime());
-		return formattedDate;
-	}
-
-	private String getCurrentDay() {
-		Calendar c = Calendar.getInstance();
-		SimpleDateFormat df = new SimpleDateFormat("dd");
-		String formattedDate = df.format(c.getTime());
-		return formattedDate;
-	}
-
 	// switch button to set urgent
 	private void addListenerOnSwitchButton() {
 		Switch.OnCheckedChangeListener switchListerner = new Switch.OnCheckedChangeListener() {
@@ -201,11 +168,10 @@ public class TaskDetail extends Activity implements
 			public void onClick(View v) {
 				title = title_edit.getText().toString();
 				String color = color_view.getText().toString();
-
 				String ddl = newYear + "-" + newMonth + "-" + newDay;
 
-				currentTask = new Task(TaskDetail.this, title);
-
+				currentTask = new Task(TaskDetail.this, id);
+				currentTask.setTitle(title);
 				currentTask.setUrgent(isUrgent);
 				currentTask.setDeadline(ddl);
 				currentTask.setColor(color);

@@ -19,7 +19,9 @@ public class TaskCursorAdapter extends CursorAdapter {
 	String isUrgent;
 	MainActivity main;
 	int completed = 0;
+	int id;
 
+	@SuppressWarnings("deprecation")
 	public TaskCursorAdapter(Context context, Cursor c) {
 		super(context, c);
 		this.context = context;
@@ -32,7 +34,6 @@ public class TaskCursorAdapter extends CursorAdapter {
 		addStartClickListener(view);
 		updateDataInListView(view);
 		main = (MainActivity) context;
-
 	}
 
 	private void getDataFromCursor(Cursor cursor) {
@@ -40,12 +41,12 @@ public class TaskCursorAdapter extends CursorAdapter {
 				.getColumnIndex(TaskProvider.TITLE));
 		currentColor = cursor.getString(cursor
 				.getColumnIndex(TaskProvider.COLOR));
-		int urgentValue = cursor.getInt(cursor
-				.getColumnIndex(TaskProvider.URGENT));
-
-		isUrgent = urgentValue > 0 ? "Urgent" : "Not Urgent";
 		completed = cursor
 				.getInt(cursor.getColumnIndex(TaskProvider.COMPLETED));
+		id = cursor.getInt(cursor.getColumnIndex(TaskProvider._ID));
+		int urgentValue = cursor.getInt(cursor
+				.getColumnIndex(TaskProvider.URGENT));
+		isUrgent = urgentValue > 0 ? "Urgent" : "Not Urgent";
 		Log.d("CURSOR_ADAPTER",
 				currentTitle + " completed: " + String.valueOf(completed));
 
@@ -59,6 +60,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 			public void onClick(View v) {
 				Intent timerIntent = new Intent(main, TimerActivity.class);
 				timerIntent.putExtra("title", title);
+				timerIntent.putExtra("id_key", id);
 				main.startActivity(timerIntent);
 			}
 		};
@@ -93,6 +95,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 			public void onClick(View v) {
 				Intent intent = new Intent(context, TaskDetail.class);
 				intent.putExtra("title_key", title);
+				intent.putExtra("id_key", id);
 				Log.d("ADAPTER", title);
 				context.startActivity(intent);
 			}
