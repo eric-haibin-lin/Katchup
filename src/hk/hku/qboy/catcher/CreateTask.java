@@ -27,7 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("SimpleDateFormat")
-public class TaskDetail extends Activity implements
+public class CreateTask extends Activity implements
 		DatePicker.OnDateChangedListener {
 
 	static private final Uri books_provider = TaskProvider.CONTENT_URI;
@@ -38,7 +38,6 @@ public class TaskDetail extends Activity implements
 	EditText color_edit;
 	TextView deadline_text;
 	Switch urgent_switch;
-	TextView task_list;
 	DatePicker picker;
 	Task currentTask;
 
@@ -55,16 +54,11 @@ public class TaskDetail extends Activity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.detail_activity);
+		setContentView(R.layout.activity_create_task);
 
 		getViewsById();
 
-		Intent intent = getIntent();
-		if (intent.hasExtra("title_key")) {
-			title = intent.getStringExtra("title_key");
-			fillInCurrentTaskData();
-		} else
-			Log.d("EDIT", "No intent passed");
+		fillInCurrentTaskData();
 
 		addListenerOnUpdateButton();
 		addListenerOnSwitchButton();
@@ -83,42 +77,17 @@ public class TaskDetail extends Activity implements
 		color_edit = (EditText) findViewById(R.id.tagColorButton);
 		deadline_text = (TextView) findViewById(R.id.deadlineText);
 		urgent_switch = (Switch) findViewById(R.id.urgentSwitch);
-		task_list = (TextView) findViewById(R.id.taskList);
 		picker = (DatePicker) findViewById(R.id.datePicker);
 
 	}
 
 	private void fillInCurrentTaskData() {
-		title_edit.setText(title);
-		currentTask = new Task(this, title);
-		String ddl = currentTask.getDeadline();
-		isUrgent = currentTask.getUrgent();
-		record = currentTask.getRecord();
-		color = currentTask.getColor();
-
-		if (isUrgent == 1) {
-			urgent_switch.setChecked(true);
-		} else
-			urgent_switch.setChecked(false);
-
-		currentTask.printDebugInfo();
-		parseDeadlineString(ddl);
-		deadline_text.setText(ddl);
+		newYear = Integer.valueOf(getCurrentYear());
+		newMonth = Integer.valueOf(getCurrentMonth());
+		newDay = Integer.valueOf(getCurrentDay());
+		deadline_text.setText(makeDeadline());
 		picker.init(newYear, newMonth - 1, newDay, this);
-
-		color_edit.setText(color);
-		task_list.setText(record);
-
-	}
-
-	private void parseDeadlineString(String ddl) {
-		// parse the deadline string to get day, month, year.
-		String delims = "-";
-		String[] tokens = ddl.split(delims);
-		newYear = Integer.valueOf(tokens[0]);
-		newMonth = Integer.valueOf(tokens[1]);
-		newDay = Integer.valueOf(tokens[2]);
-	}
+	};
 
 	private String makeDeadline() {
 		String ddl = newYear + "-" + newMonth + "-" + newDay;
@@ -168,24 +137,20 @@ public class TaskDetail extends Activity implements
 
 	// update button
 	private void addListenerOnUpdateButton() {
-
 		View.OnClickListener update_button_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
 				title = title_edit.getText().toString();
 				String color = color_edit.getText().toString();
-
 				String ddl = newYear + "-" + newMonth + "-" + newDay;
 
-				currentTask = new Task(TaskDetail.this, title);
-
+				currentTask = new Task(CreateTask.this, title);
 				currentTask.setUrgent(isUrgent);
 				currentTask.setDeadline(ddl);
 				currentTask.setColor(color);
 
 				int num_rows_updated = currentTask.update();
-				Log.d("EDIT", num_rows_updated + " task updated");
+				Log.d("CREATE", num_rows_updated + " task added");
 				finish();
-
 			}
 		};
 

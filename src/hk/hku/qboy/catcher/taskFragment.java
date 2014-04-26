@@ -38,7 +38,7 @@ public class taskFragment extends ListFragment {
 		// Add task button
 		View.OnClickListener add_button_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent(getActivity(), TaskDetail.class);
+				Intent intent = new Intent(getActivity(), CreateTask.class);
 				startActivity(intent);
 			}
 		};

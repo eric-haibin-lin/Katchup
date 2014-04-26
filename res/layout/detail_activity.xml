@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Event Title" />
+                android:text="Task" />
 
             <EditText
                 android:id="@+id/eventTitleInput"
@@ -72,7 +72,7 @@
                 android:layout_gravity="left|top"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_row="0"
+                android:layout_row="1"
                 android:text="Urgent" />
 
             <EditText
@@ -83,33 +83,53 @@
                 android:layout_gravity="right|bottom"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="5dp"
-                android:layout_row="0"
+                android:layout_row="1"
                 android:background="#C6E2FF"
                 android:shape="oval"
                 android:text="Color" />
+
+            <DatePicker
+                android:id="@+id/datePicker"
+                android:layout_width="match_parent"
+                android:layout_height="128dp"
+                android:layout_column="0"
+                android:layout_gravity="left|top"
+                android:layout_row="0"
+                android:layout_weight="0.03"
+                android:calendarViewShown="false" />
         </GridLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.68" >
+            android:layout_weight="0.68"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/taskList"
-                android:layout_width="183dp"
-                android:layout_height="318dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp" >
-            </TextView>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.04"
+                android:text="History" />
 
-            <Button
-                android:id="@+id/markCompleteButton"
-                android:layout_width="20dp"
-                android:layout_height="35dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_weight="0.03"
-                android:text="Done" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/button1"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_weight="0.03"
+                    android:text="Delete" />
+
+                <Button
+                    android:id="@+id/markCompleteButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_weight="0.03"
+                    android:text="Update" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

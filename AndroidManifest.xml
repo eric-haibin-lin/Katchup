@@ -23,7 +23,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".CustomTitleBar"
+            android:name="hk.hku.qboy.catcher.CustomTitleBar"
             android:theme="@style/customTheme" >
         </activity>
         <activity
@@ -51,6 +51,10 @@
         <activity
             android:name="hk.hku.qboy.catcher.TimerActivity"
             android:label="@string/title_activity_timer" >
+        </activity>
+        <activity
+            android:name="hk.hku.qboy.catcher.CreateTask"
+            android:label="@string/title_activity_create_task" >
         </activity>
     </application>
 
