@@ -83,10 +83,10 @@ public class DayFragment extends Fragment implements ViewFactory {
             return;
         }
         DayView view = (DayView) mViewSwitcher.getCurrentView();
-//        view.clearCachedEvents();
+        view.clearCachedEvents();
         view.reloadEvents();
 
         view = (DayView) mViewSwitcher.getNextView();
-//        view.clearCachedEvents();
+        view.clearCachedEvents();
     }
 }
