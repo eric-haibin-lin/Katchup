@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -22,6 +21,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,12 +35,17 @@ public class TaskDetail extends Activity implements
 	static final int DATE_DIALOG_ID = 999;
 
 	EditText title_edit;
-	EditText color_edit;
+	TextView color_view;
 	TextView deadline_text;
 	Switch urgent_switch;
 	TextView task_list;
 	DatePicker picker;
 	Task currentTask;
+	ImageButton redBtn;
+	ImageButton blueBtn;
+	ImageButton greenBtn;
+	ImageButton orangeBtn;
+	ImageButton yellowBtn;
 
 	int newYear;
 	int newMonth;
@@ -68,6 +73,7 @@ public class TaskDetail extends Activity implements
 
 		addListenerOnUpdateButton();
 		addListenerOnSwitchButton();
+		addListenerOnColorButtons();
 
 	}
 
@@ -80,11 +86,16 @@ public class TaskDetail extends Activity implements
 
 	private void getViewsById() {
 		title_edit = (EditText) findViewById(R.id.eventTitleInput);
-		color_edit = (EditText) findViewById(R.id.tagColorButton);
+		color_view = (TextView) findViewById(R.id.tagColorButton);
 		deadline_text = (TextView) findViewById(R.id.deadlineText);
 		urgent_switch = (Switch) findViewById(R.id.urgentSwitch);
 		task_list = (TextView) findViewById(R.id.taskList);
 		picker = (DatePicker) findViewById(R.id.datePicker);
+		redBtn = (ImageButton) findViewById(R.id.redColor);
+		blueBtn = (ImageButton) findViewById(R.id.blueColor);
+		yellowBtn = (ImageButton) findViewById(R.id.yellowColor);
+		orangeBtn = (ImageButton) findViewById(R.id.orangeColor);
+		greenBtn = (ImageButton) findViewById(R.id.greenColor);
 
 	}
 
@@ -106,7 +117,7 @@ public class TaskDetail extends Activity implements
 		deadline_text.setText(ddl);
 		picker.init(newYear, newMonth - 1, newDay, this);
 
-		color_edit.setText(color);
+		color_view.setText(color);
 		task_list.setText(record);
 
 	}
@@ -124,6 +135,23 @@ public class TaskDetail extends Activity implements
 		String ddl = newYear + "-" + newMonth + "-" + newDay;
 		return ddl;
 
+	}
+
+	private void addListenerOnColorButtons() {
+		redBtn.setOnClickListener(listenerOnColorButton("red"));
+		greenBtn.setOnClickListener(listenerOnColorButton("green"));
+		yellowBtn.setOnClickListener(listenerOnColorButton("yellow"));
+		blueBtn.setOnClickListener(listenerOnColorButton("blue"));
+		orangeBtn.setOnClickListener(listenerOnColorButton("orange"));
+	}
+
+	private View.OnClickListener listenerOnColorButton(final String color) {
+		View.OnClickListener color_on_click_listener = new View.OnClickListener() {
+			public void onClick(View v) {
+				color_view.setText(color);
+			}
+		};
+		return color_on_click_listener;
 	}
 
 	private String getCurrentYear() {
@@ -172,7 +200,7 @@ public class TaskDetail extends Activity implements
 		View.OnClickListener update_button_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
 				title = title_edit.getText().toString();
-				String color = color_edit.getText().toString();
+				String color = color_view.getText().toString();
 
 				String ddl = newYear + "-" + newMonth + "-" + newDay;
 

@@ -45,17 +45,18 @@ public class TaskCursorAdapter extends CursorAdapter {
 
 	}
 
+	// Start timer when click on task title
 	private void addStartClickListener(View view) {
-		Button startButton = (Button) view.findViewById(R.id.startButton);
+		TextView title_text = (TextView) view.findViewById(R.id.title);
 		final String title = currentTitle;
-		View.OnClickListener edit_button_on_click_listener = new View.OnClickListener() {
+		View.OnClickListener start_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent timerIntent = new Intent(main, TimerActivity.class);
 				timerIntent.putExtra("title", title);
 				main.startActivity(timerIntent);
 			}
 		};
-		startButton.setOnClickListener(edit_button_on_click_listener);
+		title_text.setOnClickListener(start_on_click_listener);
 	}
 
 	private void updateDataInListView(View view) {

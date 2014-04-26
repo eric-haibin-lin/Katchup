@@ -44,14 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="Deadline" />
-
-            <Button
-                android:id="@+id/deadlineDateSelector"
-                android:layout_width="84dp"
-                android:layout_height="34dp"
-                android:layout_marginLeft="10dp"
-                android:text="Select Deadline" />
+                android:text="Deadline " />
 
             <TextView
                 android:id="@+id/deadlineText"
@@ -75,19 +68,6 @@
                 android:layout_row="1"
                 android:text="Urgent" />
 
-            <EditText
-                android:id="@+id/tagColorButton"
-                android:layout_width="106dp"
-                android:layout_height="25dp"
-                android:layout_column="0"
-                android:layout_gravity="right|bottom"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_row="1"
-                android:background="#C6E2FF"
-                android:shape="oval"
-                android:text="Color" />
-
             <DatePicker
                 android:id="@+id/datePicker"
                 android:layout_width="match_parent"
@@ -105,30 +85,102 @@
             android:layout_weight="0.68"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/taskList"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.04"
-                android:text="History" />
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:text="Color" />
+
+                <TextView
+                    android:id="@+id/tagColorButton"
+                    android:layout_width="106dp"
+                    android:layout_height="25dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="0.6"
+                    android:background="#C6E2FF"
+                    android:ems="10"
+                    android:shape="oval"
+                    android:text="red" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
-                <Button
-                    android:id="@+id/button1"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_weight="0.03"
-                    android:text="Delete" />
+                <ImageButton
+                    android:id="@+id/redColor"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_launcher"
+                    android:text="Red" />
 
-                <Button
-                    android:id="@+id/markCompleteButton"
+                <ImageButton
+                    android:id="@+id/blueColor"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_launcher" />
+
+                <ImageButton
+                    android:id="@+id/yellowColor"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_launcher" />
+
+                <ImageButton
+                    android:id="@+id/orangeColor"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_launcher" />
+
+                <ImageButton
+                    android:id="@+id/greenColor"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_launcher" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.68"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/taskList"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_weight="0.03"
-                    android:text="Update" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.04"
+                    android:text="History" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <Button
+                        android:id="@+id/button1"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_weight="0.03"
+                        android:text="Delete" />
+
+                    <Button
+                        android:id="@+id/markCompleteButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_weight="0.03"
+                        android:text="Update" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
