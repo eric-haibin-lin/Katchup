@@ -34,7 +34,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 
 public class MainActivity extends FragmentActivity {
-	
+	String tabMonth="Calen";
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    // Inflate the menu items for use in the action bar
 	    MenuInflater inflater = getMenuInflater();
@@ -67,14 +67,21 @@ public class MainActivity extends FragmentActivity {
 	    
 	    setContentView(R.layout.main);
 	    FragmentTabHost tabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
-
+	    
+	    //setStripEnabled(false);
 	    tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
-	
+	    tabHost.getTabWidget().setStripEnabled(true);
+	    //tabHost.getTabWidget().setRightStripDrawable(R.drawable.redline);
+	    //tabHost.getTabWidget().setLeftStripDrawable(R.drawable.redline);
 
 	//1
 	tabHost.addTab(tabHost.newTabSpec("Tasks").setIndicator("Tasks"),taskFragment.class,null);
 	//2
-    tabHost.addTab(tabHost.newTabSpec("Calendar").setIndicator("Calendar"),DayFragment.class,null);
+    tabHost.addTab(tabHost.newTabSpec("Calendar").setIndicator(tabMonth),DayFragment.class,null);
     
+	}
+	
+	public void changeMonth(String mon){
+		tabMonth=mon;
 	}
 }

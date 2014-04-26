@@ -16,11 +16,6 @@
         android:stackFromBottom="false"
         android:transcriptMode="normal" >
     </ListView>
-    
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="50dp"
-        android:layout_height="50dp"/>
 
 
 </LinearLayout>
