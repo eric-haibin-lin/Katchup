@@ -587,7 +587,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                         | DateUtils.FORMAT_SHOW_YEAR, mBaseDate.timezone
         )
                 .toString();
-        ((MainActivity) mContext).changeMonth(date);
+        ((MainActivity) mContext).setTitle(date);
     }
 
     private void recalc() {

@@ -24,6 +24,7 @@ public class taskFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		V = inflater.inflate(R.layout.main1, container, false);
+		getActivity().setTitle("Katchup");
 		setListAdapter();
 		return V;
 	}

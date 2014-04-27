@@ -82,10 +82,10 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	public void changeMonth(String mon) {
-		TextView text = (TextView) tabHost.getTabWidget().getChildTabViewAt(1)
-				.findViewById(android.R.id.title);
-		text.setText("Calendar(" + mon + ")");
-	}
+//	public void changeMonth(String mon) {
+//		TextView text = (TextView) tabHost.getTabWidget().getChildTabViewAt(1)
+//				.findViewById(android.R.id.title);
+//		text.setText("Calendar(" + mon + ")");
+//	}
 
 }
