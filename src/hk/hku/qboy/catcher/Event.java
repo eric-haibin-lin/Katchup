@@ -356,13 +356,14 @@ public class Event implements Cloneable {
 				e.title = mNoTitleString;
 			}
 
-			// if (!cEvents.isNull(PROJECTION_COLOR_INDEX)) {
-			// // Read the color from the database
-			// e.color =
-			// Utils.getDisplayColorFromColor(cEvents.getInt(PROJECTION_COLOR_INDEX));
-			// } else {
-			e.color = mNoColorColor;
-			// }
+			if (!cTasks.isNull(TASK_COLOR_INDEX)) {
+				// // Read the color from the database
+				e.color=cTasks.getInt(TASK_COLOR_INDEX);
+//				e.color = getDisplayColorFromColor(cTasks
+//						.getInt(TASK_COLOR_INDEX));
+			} else {
+				e.color = mNoColorColor;
+			}
 			e.hasAlarm = false;
 			e.isRepeating = false;
 			String[] records = cTasks.getString(TASK_RECORD_INDEX).split(";");
@@ -520,13 +521,14 @@ public class Event implements Cloneable {
 			e.title = mNoTitleString;
 		}
 
-		// if (!cEvents.isNull(PROJECTION_COLOR_INDEX)) {
-		// // Read the color from the database
-		// e.color =
-		// Utils.getDisplayColorFromColor(cEvents.getInt(PROJECTION_COLOR_INDEX));
-		// } else {
-		e.color = mNoColorColor;
-		// }
+		if (!cEvents.isNull(PROJECTION_COLOR_INDEX)) {
+			// // Read the color from the database
+//			e.color = getDisplayColorFromColor(cEvents
+//					.getInt(PROJECTION_COLOR_INDEX));
+			e.color = cEvents.getInt(PROJECTION_COLOR_INDEX);
+		} else {
+			e.color = mNoColorColor;
+		}
 
 		long eStart = cEvents.getLong(PROJECTION_BEGIN_INDEX);
 		long eEnd = cEvents.getLong(PROJECTION_END_INDEX);
@@ -558,6 +560,16 @@ public class Event implements Cloneable {
 								e.endMillis, e.startDay, e.endDay, e.startTime,
 								e.endTime));
 		return e;
+	}
+
+	private static int getDisplayColorFromColor(int color) {
+		final float SATURATION_ADJUST = 1.3f;
+		final float INTENSITY_ADJUST = 0.8f;
+		float[] hsv = new float[3];
+		Color.colorToHSV(color, hsv);
+		hsv[1] = Math.min(hsv[1] * SATURATION_ADJUST, 1.0f);
+		hsv[2] = hsv[2] * INTENSITY_ADJUST;
+		return Color.HSVToColor(hsv);
 	}
 
 	/**

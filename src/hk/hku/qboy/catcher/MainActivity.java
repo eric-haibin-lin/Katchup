@@ -1,33 +1,19 @@
 package hk.hku.qboy.catcher;
 
-import android.net.Uri;
-import android.os.Bundle;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
-import android.view.Menu;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.ListFragment;
-import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.TabWidget;
-import android.widget.TextView;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TabWidget;
+import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity {
 	String tabMonth = "Calendar";
+	private FragmentTabHost tabHost;
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu items for use in the action bar
@@ -66,7 +52,7 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.main);
-		FragmentTabHost tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
+		tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
 
 		// setStripEnabled(false);
 		tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
@@ -81,22 +67,23 @@ public class MainActivity extends FragmentActivity {
 		tabHost.addTab(tabHost.newTabSpec("Calendar").setIndicator(tabMonth),
 				DayFragment.class, null);
 		TabWidget widget = tabHost.getTabWidget();
-		for(int i = 0; i < widget.getChildCount(); i++) {
-		    View v = widget.getChildAt(i);
+		for (int i = 0; i < widget.getChildCount(); i++) {
+			View v = widget.getChildAt(i);
 
-		    // Look for the title view to ensure this is an indicator and not a divider.
-		    TextView tv = (TextView)v.findViewById(android.R.id.title);
-		    if(tv == null) {
-		        continue;
-		    }
-		    v.setBackgroundResource(R.drawable.tab_selector);
+			// Look for the title view to ensure this is an indicator and not a
+			// divider.
+			TextView tv = (TextView) v.findViewById(android.R.id.title);
+			if (tv == null) {
+				continue;
+			}
+			v.setBackgroundResource(R.drawable.tab_selector);
 		}
-	
-	
-	
 	}
 
 	public void changeMonth(String mon) {
-		tabMonth = mon;
+		TextView text = (TextView) tabHost.getTabWidget().getChildTabViewAt(1)
+				.findViewById(android.R.id.title);
+		text.setText("Calendar(" + mon + ")");
 	}
+
 }

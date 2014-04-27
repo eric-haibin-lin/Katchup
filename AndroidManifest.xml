@@ -37,6 +37,8 @@
         </activity>
         <activity
             android:name="hk.hku.qboy.catcher.TaskDetail"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
             android:label="@string/title_activity_task_detail" >
         </activity>
 
@@ -50,10 +52,14 @@
 
         <activity
             android:name="hk.hku.qboy.catcher.TimerActivity"
-            android:label="@string/title_activity_timer" >
+            android:configChanges="orientation"
+            android:label="@string/title_activity_timer"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="hk.hku.qboy.catcher.CreateTask"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
             android:label="@string/title_activity_create_task" >
         </activity>
         <activity

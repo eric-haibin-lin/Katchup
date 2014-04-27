@@ -12,7 +12,7 @@
         <ImageButton
             android:id="@+id/color"
             android:layout_width="0dp"
-            android:layout_height="40dip"
+            android:layout_height="50dip"
             android:layout_gravity="left"
             android:layout_weight="0.12"
             android:adjustViewBounds="true"
@@ -29,9 +29,9 @@
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="40dip"
+                android:layout_height="50dip"
                 android:layout_gravity="center_horizontal"
-                android:minWidth="200dip"
+                android:minWidth="300dip"
                 android:paddingTop="9dp"
                 android:text="Title"
                 android:textStyle="bold" />
@@ -40,7 +40,7 @@
         <Button
             android:id="@+id/edit"
             android:layout_width="0dp"
-            android:layout_height="30dip"
+            android:layout_height="40dip"
             android:layout_gravity="center"
             android:layout_weight="0.1" />
     </LinearLayout>

@@ -3,17 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity" 
-    android:theme="@android:style/Theme.NoTitleBar">
+    android:theme="@android:style/Theme.NoTitleBar"
+    tools:context=".MainActivity" >
 
     <ListView
         android:id="@+id/android:list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:stackFromBottom="false"
         android:transcriptMode="normal" >
     </ListView>
-
 
 </LinearLayout>

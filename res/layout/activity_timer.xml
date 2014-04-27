@@ -10,6 +10,9 @@
         android:id="@+id/timerValue"
         android:layout_width="350dip"
         android:layout_height="300dip"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="41dp"
         android:adjustViewBounds="true"
         android:background="#ffffff"
         android:gravity="center"
@@ -24,7 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/timerValue"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="37dp"
-        android:text="Current task" />
+        android:layout_marginTop="21dp"
+        android:text="Current task"
+        android:textSize="20dip" />
 
 </RelativeLayout>
