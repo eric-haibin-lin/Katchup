@@ -92,10 +92,11 @@ public class Timer extends Service {
 		timeInMilliseconds = 0L;
 		timeSwapBuff = 0L;
 		updatedTime = 0L;
-		timeTo = getCurrentTime();
+		stopSelf();
 	}
 
 	public String makeRecord() {
+		timeTo = getCurrentTime();
 		return timeFrom + "/" + timeTo;
 	}
 

@@ -117,8 +117,8 @@ public class TimerActivity extends Activity {
 		timerValue.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				if (timer.isCountingTime) {
+					destroyTimer();
 					finish();
-					timerValue.setBackgroundResource(R.drawable.red_time);
 				} else {
 					timerValue.setBackgroundResource(R.drawable.green_time);
 					task = new Task(TimerActivity.this, id);
@@ -208,35 +208,24 @@ public class TimerActivity extends Activity {
 		}
 	}
 
-	@Override
-	protected void onStop() {
-		super.onStop();
-		Log.d("TIMER", "OnStop");
-		if (timer != null)
-			timer.setBroadcast(false);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if (timer != null)
-			timer.setBroadcast(false);
-	}
-
-	@Override
-	// this is called either from back button or stop timer button.
-	protected void onDestroy() {
-		super.onDestroy();
+	private void destroyTimer() {
 		this.unregisterReceiver(mReceiver);
+		String newTimerRecord = timer.makeRecord();
 		timer.finish();
 		if (task != null) {
-			String newTimerRecord = timer.makeRecord();
 			task.addTrackRecord(newTimerRecord);
 			task.update();
 		}
 		doUnbindService();
 		resetSettings();
-		Log.d("TIMER", "OnDestroy");
+		Log.d("TIMER", "destroyTimer");
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		destroyTimer();
+		this.finish();
 	}
 
 }
