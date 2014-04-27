@@ -1,5 +1,8 @@
 package hk.hku.qboy.catcher;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+@SuppressLint("SimpleDateFormat")
 public class TaskCursorAdapter extends CursorAdapter {
 
 	Context context;
@@ -21,6 +25,13 @@ public class TaskCursorAdapter extends CursorAdapter {
 	MainActivity main;
 	int completed = 0;
 	int id;
+	String deadline;
+	int deadlineYear;
+	int deadlineMonth;
+	int deadlineDay;
+	int currentYear;
+	int currentMonth;
+	int currentDay;
 
 	ImageButton colorBtn;
 
@@ -28,6 +39,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 	public TaskCursorAdapter(Context context, Cursor c) {
 		super(context, c);
 		this.context = context;
+		setCurrentDate();
 	}
 
 	@Override
@@ -47,17 +59,53 @@ public class TaskCursorAdapter extends CursorAdapter {
 		completed = cursor
 				.getInt(cursor.getColumnIndex(TaskProvider.COMPLETED));
 		id = cursor.getInt(cursor.getColumnIndex(TaskProvider._ID));
+		deadline = cursor.getString(cursor.getColumnIndex(TaskProvider.DDL));
+
 		int urgentValue = cursor.getInt(cursor
 				.getColumnIndex(TaskProvider.URGENT));
 		isUrgent = urgentValue > 0 ? true : false;
 		Log.d("CURSOR_ADAPTER", currentTitle + " id: " + String.valueOf(id));
 
-		// Task task = new Task((MainActivity) context, id);
-		// if (task.testUrgent()) {
-		// task.setUrgent(1);
-		// task.update();
-		// }
-		// Log.d("Total", task.getTotalTime());
+		if (!isUrgent && testUrgent()) {
+			Task task = new Task((MainActivity) context, id);
+			task.setUrgent(1);
+			task.update();
+			Log.d("Total", task.getTotalTime());
+		}
+	}
+
+	private void setCurrentDate() {
+		Calendar c = Calendar.getInstance();
+		SimpleDateFormat df = new SimpleDateFormat("dd");
+		String formattedDate = df.format(c.getTime());
+		currentDay = Integer.valueOf(formattedDate);
+		df = new SimpleDateFormat("MM");
+		formattedDate = df.format(c.getTime());
+		currentMonth = Integer.valueOf(formattedDate);
+		df = new SimpleDateFormat("yyyy");
+		formattedDate = df.format(c.getTime());
+		currentYear = Integer.valueOf(formattedDate);
+	}
+
+	private boolean testUrgent() {
+		parseDeadlineString(deadline);
+		if (currentYear > deadlineYear)
+			return true;
+		if (currentYear == deadlineYear && currentMonth > deadlineMonth)
+			return true;
+		if (currentYear == deadlineYear && currentMonth == deadlineMonth
+				&& deadlineDay - currentDay < 3)
+			return true;
+		else
+			return false;
+	}
+
+	private void parseDeadlineString(String ddl) {
+		String delims = "-";
+		String[] tokens = ddl.split(delims);
+		deadlineYear = Integer.valueOf(tokens[0]);
+		deadlineMonth = Integer.valueOf(tokens[1]);
+		deadlineDay = Integer.valueOf(tokens[2]);
 	}
 
 	// Start timer when click on task title
