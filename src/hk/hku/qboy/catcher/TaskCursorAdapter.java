@@ -151,7 +151,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 		else if (currentColor == (Color.YELLOW))
 			colorBtn.setBackgroundResource(isUrgent ? R.drawable.yellow_u
 					: R.drawable.yellow_n);
-		else if (currentColor == (Color.GREY))
+		else if (currentColor == (Color.GRAY))
 			colorBtn.setBackgroundResource(isUrgent ? R.drawable.grey_u
 					: R.drawable.grey_n);
 		else if (currentColor == (Color.PINK))

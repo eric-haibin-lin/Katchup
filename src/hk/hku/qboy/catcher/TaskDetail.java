@@ -157,7 +157,7 @@ public class TaskDetail extends Activity implements
 			v.setBackgroundResource(R.drawable.yellow_u);
 			break;
 		case R.id.greyColor:
-			color = Color.GREY;
+			color = Color.GRAY;
 			v.setBackgroundResource(R.drawable.grey_u);
 			break;
 		case R.id.pinkColor:
@@ -203,7 +203,7 @@ public class TaskDetail extends Activity implements
 		else if (currentColor == Color.YELLOW)
 			findViewById(R.id.yellowColor).setBackgroundResource(
 					R.drawable.yellow_u);
-		else if (currentColor == Color.GREY)
+		else if (currentColor == Color.GRAY)
 			findViewById(R.id.greyColor).setBackgroundResource(
 					R.drawable.grey_u);
 		else if (currentColor == Color.PINK)

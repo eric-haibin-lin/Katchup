@@ -19,50 +19,61 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:card="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+    xmlns:card="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <!-- Card visible layout -->
     <LinearLayout
         android:id="@+id/card_main_layout"
         style="@style/card.main_layout"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <it.gmariotti.cardslib.library.view.component.CardThumbnailView
             style="@style/card_thumbnail_outer_layout"
             android:id="@+id/card_thumbnail_layout"
+            android:layout_width="wrap_content"
+            card:card_thumbnail_layout_resourceID="@layout/thumbnail"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            card:card_thumbnail_layout_resourceID="@layout/carddemo_grid_gplay_thumbnail_layout"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent">
 
-        <it.gmariotti.cardslib.library.view.component.CardHeaderView
-            style="@style/card.header_outer_layout"
-            android:id="@+id/card_header_layout"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <it.gmariotti.cardslib.library.view.component.CardHeaderView
+                style="@style/card.header_outer_layout"
+                android:id="@+id/card_header_layout"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <!-- Main Content View -->
-        <FrameLayout
-            android:id="@+id/card_main_content_layout"
-            style="@style/Birth.card.content_outer_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <!-- Main Content View -->
+            <FrameLayout
+                android:id="@+id/card_main_content_layout"
+                style="@style/card.content_outer_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
     </LinearLayout>
-
     <!-- Compound view for Shadow
            If you want to customize this element use attr card:card_shadow_layout_resourceID -->
     <it.gmariotti.cardslib.library.view.component.CardShadowView
         style="@style/card.shadow_outer_layout"
         android:id="@+id/card_shadow_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:id="@+id/card_content_expand_layout"
+        style="@style/card.main_contentExpand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
 </LinearLayout>

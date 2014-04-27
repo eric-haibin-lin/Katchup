@@ -29,7 +29,7 @@ public class TaskProvider extends ContentProvider {
 	public static final String STATUS = "status";
 	public static final String RECORD = "record";
 	public static final String COMPLETED = "completed";
-	
+
 	private static final int TASKS = 1;
 	private static final int TASK_ID = 2;
 
@@ -42,6 +42,11 @@ public class TaskProvider extends ContentProvider {
 
 	private static String LOG_TAG = "catcher";
 
+	public static final String[] ALL_PROJECTION = new String[] { _ID, TITLE,
+			DDL, COLOR, URGENT, COMPLETED };
+	public static final String DEFAULT_SORT =
+            URGENT + " DESC, "+ DDL +" ASC";
+
 	// database object
 	private SQLiteDatabase tasks_db;
 
@@ -51,9 +56,9 @@ public class TaskProvider extends ContentProvider {
 	private static final String DATABASE_CREATE = "create table "
 			+ DATABASE_TABLE + " (" + _ID
 			+ " integer primary key autoincrement, " + TITLE
-			+ " text not null, " + COMPLETED + " int not null, " + DDL + " text not null, " + RECORD
-			+ " text not null, " + URGENT + " int not null, " + COLOR
-			+ " text not null);";
+			+ " text not null, " + COMPLETED + " int not null, " + DDL
+			+ " text not null, " + RECORD + " text not null, " + URGENT
+			+ " int not null, " + COLOR + " text not null);";
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		DatabaseHelper(Context context) {
