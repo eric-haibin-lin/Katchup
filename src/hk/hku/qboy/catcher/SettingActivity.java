@@ -41,6 +41,7 @@ public class SettingActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.setting, menu);
+		getActionBar().setTitle("Setting");
 //		View v = getActionBar().getCustomView();
 //		TextView titleTxtView = (TextView) v.findViewById(R.id.actionbarTitle);
 //	    titleTxtView.setText(title);

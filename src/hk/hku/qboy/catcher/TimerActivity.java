@@ -55,6 +55,7 @@ public class TimerActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.timer, menu);
+		getActionBar().setTitle("Timer");
 		return true;
 	}
 
