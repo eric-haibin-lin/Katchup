@@ -51,6 +51,13 @@ public class TaskCursorAdapter extends CursorAdapter {
 				.getColumnIndex(TaskProvider.URGENT));
 		isUrgent = urgentValue > 0 ? true : false;
 		Log.d("CURSOR_ADAPTER", currentTitle + " id: " + String.valueOf(id));
+
+		// Task task = new Task((MainActivity) context, id);
+		// if (task.testUrgent()) {
+		// task.setUrgent(1);
+		// task.update();
+		// }
+		// Log.d("Total", task.getTotalTime());
 	}
 
 	// Start timer when click on task title
