@@ -192,37 +192,6 @@ public class Task {
 		return totalTime;
 	}
 
-	public boolean testUrgent() {
-		parseDeadlineString(ddl);
 
-		Calendar c = Calendar.getInstance();
-		SimpleDateFormat df = new SimpleDateFormat("dd");
-		String formattedDate = df.format(c.getTime());
-		int currentDay = Integer.valueOf(formattedDate);
-		df = new SimpleDateFormat("MM");
-		formattedDate = df.format(c.getTime());
-		int currentMonth = Integer.valueOf(formattedDate);
-		df = new SimpleDateFormat("yyyy");
-		formattedDate = df.format(c.getTime());
-		int currentYear = Integer.valueOf(formattedDate);
-
-		if (currentYear > deadlineYear)
-			return true;
-		if (currentYear == deadlineYear && currentMonth > deadlineMonth)
-			return true;
-		if (currentYear == deadlineYear && currentMonth == deadlineMonth
-				&& deadlineDay - currentDay < 3)
-			return true;
-		else
-			return false;
-	}
-
-	private void parseDeadlineString(String ddl) {
-		String delims = "-";
-		String[] tokens = ddl.split(delims);
-		deadlineYear = Integer.valueOf(tokens[0]);
-		deadlineMonth = Integer.valueOf(tokens[1]);
-		deadlineDay = Integer.valueOf(tokens[2]);
-	}
 
 }
