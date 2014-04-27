@@ -103,6 +103,7 @@
                     android:id="@+id/redColor"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_marginLeft="30dp"
                     android:layout_marginRight="10dp"
                     android:adjustViewBounds="true"
                     android:background="#ffffffff"
