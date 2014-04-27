@@ -37,7 +37,7 @@ public class TaskDetail extends Activity implements
 	int id;
 	int isUrgent;
 	String title;
-	String color;
+	int color;
 	int completed = 0;
 	String record;
 
@@ -195,27 +195,27 @@ public class TaskDetail extends Activity implements
 		}
 	}
 
-	private void setColorImage(String currentColor) {
-		if (currentColor.equals(Color.RED))
+	private void setColorImage(int currentColor) {
+		if (currentColor==Color.RED)
 			findViewById(R.id.redColor).setBackgroundResource(R.drawable.red_u);
-		else if (currentColor.equals(Color.BLUE))
+		else if (currentColor==Color.BLUE)
 			findViewById(R.id.blueColor).setBackgroundResource(
 					R.drawable.blue_u);
-		else if (currentColor.equals(Color.YELLOW))
+		else if (currentColor==Color.YELLOW)
 			findViewById(R.id.yellowColor).setBackgroundResource(
 					R.drawable.yellow_u);
-		else if (currentColor.equals(Color.GREY))
+		else if (currentColor==Color.GREY)
 			findViewById(R.id.greyColor).setBackgroundResource(
 					R.drawable.grey_u);
-		else if (currentColor.equals(Color.PINK))
+		else if (currentColor==Color.PINK)
 			findViewById(R.id.pinkColor).setBackgroundResource(
 					R.drawable.pink_u);
-		else if (currentColor.equals(Color.GREEN))
+		else if (currentColor==Color.GREEN)
 			findViewById(R.id.greenColor).setBackgroundResource(
 					R.drawable.green_u);
 		else
 			Log.d("COLOR", "non found.");
-		Log.d("COLOR", currentColor);
+		Log.d("COLOR", ""+currentColor);
 	}
 
 	// switch button to set urgent

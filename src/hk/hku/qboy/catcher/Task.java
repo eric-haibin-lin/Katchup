@@ -18,7 +18,7 @@ public class Task {
 	private int urgent;
 	private int id;
 	private String title;
-	private String color;
+	private int color;
 	private String ddl;
 	private String record = "";
 	private int completed = 0;
@@ -68,12 +68,12 @@ public class Task {
 		return this.urgent;
 	}
 
-	public void setColor(String color) {
+	public void setColor(int color) {
 		this.color = color;
 		return;
 	}
 
-	public String getColor() {
+	public int getColor() {
 		return this.color;
 	}
 
@@ -105,8 +105,8 @@ public class Task {
 			cursor.moveToNext();
 			setDeadline(cursor.getString(cursor
 					.getColumnIndex(TaskProvider.DDL)));
-			setColor(cursor
-					.getString(cursor.getColumnIndex(TaskProvider.COLOR)));
+			setColor(Integer.parseInt(cursor
+					.getString(cursor.getColumnIndex(TaskProvider.COLOR))));
 			setUrgent(cursor.getInt(cursor.getColumnIndex(TaskProvider.URGENT)));
 			setRecord(cursor.getString(cursor
 					.getColumnIndex(TaskProvider.RECORD)));

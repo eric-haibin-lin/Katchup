@@ -1,15 +1,12 @@
 package hk.hku.qboy.catcher;
 
-public class Color {
+public class Color extends android.graphics.Color {
 
-	public static String RED = "#f26c4f";
-	public static String GREY = "#625D5D";
-	public static String BLUE = "#A0CFEC";
-	public static String GREEN = "#64E986";
-	public static String YELLOW = "#FFE87C";
-	public static String PINK = "#FC6C85";
-
-	public Color() {
-	}
-
+	public static int RED = 0xfff26c4f;
+	public static int GREY = 0xff625D5D;
+	public static int BLUE = 0xffA0CFEC;
+	public static int GREEN = 0xff64E986;
+	public static int YELLOW = 0xffFFE87C;
+	public static int PINK = 0xffFC6C85;
+	
 }
