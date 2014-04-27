@@ -25,10 +25,11 @@
         android:id="@+id/taskText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/timerValue"
+        android:layout_alignBottom="@+id/timerValue"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="21dp"
+        android:layout_marginBottom="62dp"
         android:text="Current task"
+        android:textColor="@color/titlebackgroundcolor"
         android:textSize="20dip" />
 
 </RelativeLayout>
