@@ -51,7 +51,7 @@ public class DayFragment extends Fragment implements ViewFactory {
 		view.setLayoutParams(new ViewSwitcher.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		mSelectedDay.setToNow();
-		view.setSelected(mSelectedDay);
+		view.setSelected(mSelectedDay,true,true);
 		view.reloadEvents();
 		return view;
 	}
