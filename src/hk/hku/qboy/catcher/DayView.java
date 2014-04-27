@@ -28,43 +28,38 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Handler;
-import android.provider.CalendarContract.Attendees;
+import android.text.Layout.Alignment;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.text.Layout.Alignment;
-import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.Interpolator;
-import android.view.animation.TranslateAnimation;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ScaleGestureDetector;
+import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.Interpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.EdgeEffect;
 import android.widget.OverScroller;
 import android.widget.PopupWindow;
@@ -302,6 +297,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 	public DayView(Context context, ViewSwitcher viewSwitcher,
 			EventLoader eventLoader, int numDays) {
 		super(context);
+		mContext = context;
 		mResources = context.getResources();
 		// mCreateNewEventString = mResources.getString(R.string.event_create);
 		// mNewEventHintString =
@@ -562,7 +558,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 	@SuppressLint("WrongCall")
 	@Override
 	protected void onDraw(Canvas canvas) {
-		Log.d(TAG, "on draw");
 		if (mRemeasure) {
 			remeasure(getWidth(), getHeight());
 			mRemeasure = false;
@@ -815,11 +810,11 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		int cellHeight = mCellHeight;
 
 		// Use the selected hour as the selection region
-//		Rect selectionArea = mSelectionRect;
-//		selectionArea.top = top + mSelectionHour * (cellHeight + HOUR_GAP);
-//		selectionArea.bottom = selectionArea.top + cellHeight;
-//		selectionArea.left = left;
-//		selectionArea.right = selectionArea.left + cellWidth;
+		// Rect selectionArea = mSelectionRect;
+		// selectionArea.top = top + mSelectionHour * (cellHeight + HOUR_GAP);
+		// selectionArea.bottom = selectionArea.top + cellHeight;
+		// selectionArea.left = left;
+		// selectionArea.right = selectionArea.left + cellWidth;
 
 		final ArrayList<Event> events = mEvents;
 		int numEvents = events.size();
@@ -840,10 +835,10 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 				continue;
 			}
 
-//			if (date == mSelectionDay && mComputeSelectedEvents
-//					&& geometry.eventIntersectsSelection(event, selectionArea)) {
-//				mSelectedEvents.add(event);
-//			}
+			// if (date == mSelectionDay && mComputeSelectedEvents
+			// && geometry.eventIntersectsSelection(event, selectionArea)) {
+			// mSelectedEvents.add(event);
+			// }
 
 			Rect r = drawEventRect(event, canvas, p, eventTextPaint,
 					mViewStartY, viewEndY);
@@ -1087,7 +1082,6 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 	}
 
 	private void drawHours(Rect r, Canvas canvas, Paint p) {
-		Log.d(TAG, "drawhours");
 		setupHourTextPaint(p);
 
 		int y = HOUR_GAP + mHoursTextHeight + HOURS_TOP_MARGIN;
@@ -1243,10 +1237,10 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		mNumHours = mGridAreaHeight / (mCellHeight + HOUR_GAP);
 		mEventGeometry.setHourHeight(mCellHeight);
 
-		 final long minimumDurationMillis = (long) (MIN_EVENT_HEIGHT
-		 * DateUtils.MINUTE_IN_MILLIS / (mCellHeight / 60.0f));
-		 Event.computePositions(mEvents, minimumDurationMillis);
-//		Event.computePositions(mEvents, 0);
+		final long minimumDurationMillis = (long) (MIN_EVENT_HEIGHT
+				* DateUtils.MINUTE_IN_MILLIS / (mCellHeight / 60.0f));
+		Event.computePositions(mEvents, minimumDurationMillis);
+		// Event.computePositions(mEvents, 0);
 
 		// Compute the top of our reachable view
 		mMaxViewStartY = HOUR_GAP + 24 * (mCellHeight + HOUR_GAP)
@@ -1691,7 +1685,7 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		view.requestFocus();
 		view.clearCachedEvents();
 		view.reloadEvents();
-		// view.updateTitle();
+		view.updateTitle();
 		view.restartCurrentTimeUpdates();
 
 		return view;
@@ -2428,5 +2422,36 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
 		@Override
 		public void onAnimationStart(Animation animation) {
 		}
+	}
+
+	public void updateTitle() {
+		Time start = new Time(mBaseDate);
+		start.normalize(true);
+		Time end = new Time(start);
+		end.monthDay += mNumDays - 1;
+		// Move it forward one minute so the formatter doesn't lose a day
+		end.minute += 1;
+		end.normalize(true);
+
+		long formatFlags = DateUtils.FORMAT_SHOW_DATE
+				| DateUtils.FORMAT_SHOW_YEAR;
+		if (mNumDays != 1) {
+			// Don't show day of the month if for multi-day view
+			formatFlags |= DateUtils.FORMAT_NO_MONTH_DAY;
+
+			// Abbreviate the month if showing multiple months
+			if (start.month != end.month) {
+				formatFlags |= DateUtils.FORMAT_ABBREV_MONTH;
+			}
+		}
+		String date = DateUtils.formatDateRange(
+				mContext,
+				new Formatter(new StringBuilder(10), Locale.getDefault()),
+				mBaseDate.toMillis(false),
+				mBaseDate.toMillis(false),
+				DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_NO_MONTH_DAY
+						| DateUtils.FORMAT_SHOW_YEAR, mBaseDate.timezone)
+				.toString();
+		((MainActivity) mContext).changeMonth(date);
 	}
 }
