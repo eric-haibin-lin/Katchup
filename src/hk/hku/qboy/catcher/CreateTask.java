@@ -182,21 +182,21 @@ public class CreateTask extends Activity implements
 	}
 
 	private void setColorImage(int currentColor) {
-		if (currentColor==Color.RED)
+		if (currentColor == Color.RED)
 			findViewById(R.id.redColor).setBackgroundResource(R.drawable.red_u);
-		else if (currentColor==Color.BLUE)
+		else if (currentColor == Color.BLUE)
 			findViewById(R.id.blueColor).setBackgroundResource(
 					R.drawable.blue_u);
-		else if (currentColor==Color.YELLOW)
+		else if (currentColor == Color.YELLOW)
 			findViewById(R.id.yellowColor).setBackgroundResource(
 					R.drawable.yellow_u);
-		else if (currentColor==Color.GREY)
+		else if (currentColor == Color.GREY)
 			findViewById(R.id.greyColor).setBackgroundResource(
 					R.drawable.grey_u);
-		else if (currentColor==Color.PINK)
+		else if (currentColor == Color.PINK)
 			findViewById(R.id.pinkColor).setBackgroundResource(
 					R.drawable.pink_u);
-		else if (currentColor==Color.GREEN)
+		else if (currentColor == Color.GREEN)
 			findViewById(R.id.greenColor).setBackgroundResource(
 					R.drawable.green_u);
 	}
@@ -224,8 +224,9 @@ public class CreateTask extends Activity implements
 		View.OnClickListener update_button_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
 				title = title_edit.getText().toString();
+				if (title.equals(""))
+					return;
 				String ddl = makeDeadline();
-
 				currentTask = new Task(CreateTask.this);
 				currentTask.setUrgent(isUrgent);
 				currentTask.setDeadline(ddl);

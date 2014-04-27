@@ -50,7 +50,8 @@
 
         <activity
             android:name="hk.hku.qboy.catcher.TimerActivity"
-            android:label="@string/title_activity_timer" >
+            android:label="@string/title_activity_timer"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="hk.hku.qboy.catcher.CreateTask"
