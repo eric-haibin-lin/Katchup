@@ -53,7 +53,7 @@
         android:text="Turn off Wifi for me!" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/totalTime"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_above="@+id/wifiBox"

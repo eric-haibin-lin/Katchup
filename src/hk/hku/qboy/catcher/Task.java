@@ -34,6 +34,10 @@ public class Task {
 		return;
 	}
 
+	public long getTotalSec() {
+		return totalSec;
+	}
+
 	public Task(Activity activity) {
 		this.taskModel = new TaskModel(activity);
 		return;

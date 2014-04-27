@@ -11,13 +11,16 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 public class SettingActivity extends Activity {
 
+	long totalSec = 0;
 	static private final Uri tasks_provider = TaskProvider.CONTENT_URI;
 
 	CheckBox wifiBox;
 	CheckBox cellularBox;
+	TextView totalText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,8 @@ public class SettingActivity extends Activity {
 		readPreference();
 		addConfirmListener();
 		addCancelListener();
+		countTotalTimeTracked();
+		totalText.setText("Total Catchup: " + getTotalTime(totalSec));
 	}
 
 	@Override
@@ -59,6 +64,7 @@ public class SettingActivity extends Activity {
 	private void findViews() {
 		wifiBox = (CheckBox) findViewById(R.id.wifiBox);
 		cellularBox = (CheckBox) findViewById(R.id.cellularBox);
+		totalText = (TextView) findViewById(R.id.totalTime);
 	}
 
 	private void addConfirmListener() {
@@ -103,17 +109,34 @@ public class SettingActivity extends Activity {
 	}
 
 	private void countTotalTimeTracked() {
+
 		Cursor cursor = getContentResolver().query(tasks_provider, null, null,
 				null, null);
 		if (cursor != null) {
 			cursor.moveToFirst();
 			// iterate over rows
 			for (int i = 0; i < cursor.getCount(); i++) {
-				// stringBuilder.append("\n");
-				// move to the next row
+
+				int id = cursor.getInt(cursor.getColumnIndex(TaskProvider._ID));
+				Task task = new Task(SettingActivity.this, id);
+				totalSec += task.getTotalSec();
 				cursor.moveToNext();
 			}
 			cursor.close();
 		}
+	}
+
+	private String getTotalTime(long time) {
+		long totalMin = time / 60;
+		String totalTime = "";
+		if (totalMin >= 60) {
+			long totalHour = totalMin / 60;
+			long remainingMin = totalMin - totalHour * 60;
+			totalTime = String.valueOf(totalHour) + " Hour "
+					+ String.valueOf(remainingMin) + " Minutes";
+		} else {
+			totalTime = String.valueOf(totalMin) + " Minutes";
+		}
+		return totalTime;
 	}
 }
