@@ -14,20 +14,23 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/eventTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:text="Task" />
 
             <EditText
                 android:id="@+id/eventTitleInput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
@@ -62,6 +65,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_row="1"
+                android:textSize="14sp"
                 android:text="Urgent" />
 
             <DatePicker
@@ -90,7 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.4"
-                    android:text="Color" />
+                    android:text="" />
 
                 <TextView
                     android:id="@+id/tagColorButton"
@@ -101,7 +105,7 @@
                     android:layout_weight="0.6"
                     android:ems="10"
                     android:shape="oval"
-                    android:text="red" />
+                    android:text="" />
             </LinearLayout>
 
             <LinearLayout
@@ -112,6 +116,7 @@
                     android:id="@+id/redColor"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_marginLeft="30dp"
                     android:layout_marginRight="10dp"
                     android:adjustViewBounds="true"
                     android:background="#ffffffff"
@@ -180,6 +185,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="0.5"
+                    android:layout_marginLeft="10dp"
                     android:paddingTop="10dp"
                     android:text="History Usage" />
 
