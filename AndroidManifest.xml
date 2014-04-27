@@ -56,6 +56,10 @@
             android:name="hk.hku.qboy.catcher.CreateTask"
             android:label="@string/title_activity_create_task" >
         </activity>
+        <activity
+            android:name="hk.hku.qboy.catcher.SettingActivity"
+            android:label="@string/title_activity_setting" >
+        </activity>
     </application>
 
 </manifest>

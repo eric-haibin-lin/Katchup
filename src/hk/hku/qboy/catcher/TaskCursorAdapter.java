@@ -47,20 +47,19 @@ public class TaskCursorAdapter extends CursorAdapter {
 		int urgentValue = cursor.getInt(cursor
 				.getColumnIndex(TaskProvider.URGENT));
 		isUrgent = urgentValue > 0 ? "Urgent" : "Not Urgent";
-		Log.d("CURSOR_ADAPTER",
-				currentTitle + " completed: " + String.valueOf(completed));
-
+		Log.d("CURSOR_ADAPTER", currentTitle + " id: " + String.valueOf(id));
 	}
 
 	// Start timer when click on task title
 	private void addStartClickListener(View view) {
 		TextView title_text = (TextView) view.findViewById(R.id.title);
 		final String title = currentTitle;
+		final int idToPass = id;
 		View.OnClickListener start_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent timerIntent = new Intent(main, TimerActivity.class);
 				timerIntent.putExtra("title", title);
-				timerIntent.putExtra("id_key", id);
+				timerIntent.putExtra("id_key", idToPass);
 				main.startActivity(timerIntent);
 			}
 		};
@@ -69,12 +68,9 @@ public class TaskCursorAdapter extends CursorAdapter {
 
 	private void updateDataInListView(View view) {
 		TextView title = (TextView) view.findViewById(R.id.title);
-		Button urgent = (Button) view.findViewById(R.id.urgent);
 		Button color = (Button) view.findViewById(R.id.color);
-
 		title.setText(currentTitle);
 		color.setText(currentColor);
-		urgent.setText(isUrgent);
 	}
 
 	@Override
@@ -91,11 +87,12 @@ public class TaskCursorAdapter extends CursorAdapter {
 		Button editButton = (Button) view.findViewById(R.id.edit);
 		editButton.setBackgroundResource(R.drawable.edit);
 		final String title = currentTitle;
+		final int idToPass = id;
 		View.OnClickListener edit_button_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(context, TaskDetail.class);
 				intent.putExtra("title_key", title);
-				intent.putExtra("id_key", id);
+				intent.putExtra("id_key", idToPass);
 				Log.d("ADAPTER", title);
 				context.startActivity(intent);
 			}

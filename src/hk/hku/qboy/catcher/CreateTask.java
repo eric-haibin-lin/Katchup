@@ -15,31 +15,29 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Switch;
-import android.widget.TextView;
 
 @SuppressLint("SimpleDateFormat")
 public class CreateTask extends Activity implements
 		DatePicker.OnDateChangedListener {
 
 	EditText title_edit;
-	TextView color_view;
-	TextView deadline_text;
 	Switch urgent_switch;
 	DatePicker picker;
 	Task currentTask;
 	ImageButton redBtn;
 	ImageButton blueBtn;
 	ImageButton greenBtn;
-	ImageButton orangeBtn;
+	ImageButton greyBtn;
 	ImageButton yellowBtn;
-
+	ImageButton pinkBtn;
+	ImageButton currentColorBtn;
 	int newYear;
 	int newMonth;
 	int newDay;
 
 	int isUrgent;
 	String title;
-	String color;
+	String color = Color.RED;
 	String record;
 
 	@Override
@@ -66,24 +64,23 @@ public class CreateTask extends Activity implements
 
 	private void getViewsById() {
 		title_edit = (EditText) findViewById(R.id.eventTitleInput);
-		color_view = (TextView) findViewById(R.id.tagColorButton);
-		deadline_text = (TextView) findViewById(R.id.deadlineText);
 		urgent_switch = (Switch) findViewById(R.id.urgentSwitch);
 		picker = (DatePicker) findViewById(R.id.datePicker);
 		redBtn = (ImageButton) findViewById(R.id.redColor);
 		blueBtn = (ImageButton) findViewById(R.id.blueColor);
 		yellowBtn = (ImageButton) findViewById(R.id.yellowColor);
-		orangeBtn = (ImageButton) findViewById(R.id.orangeColor);
+		greyBtn = (ImageButton) findViewById(R.id.greyColor);
 		greenBtn = (ImageButton) findViewById(R.id.greenColor);
-
+		pinkBtn = (ImageButton) findViewById(R.id.pinkColor);
+		currentColorBtn = redBtn;
 	}
 
 	private void fillInCurrentTaskData() {
 		newYear = Integer.valueOf(getCurrentYear());
 		newMonth = Integer.valueOf(getCurrentMonth());
 		newDay = Integer.valueOf(getCurrentDay());
-		deadline_text.setText(makeDeadline());
 		picker.init(newYear, newMonth - 1, newDay, this);
+		setColorImage(color);
 	};
 
 	private String makeDeadline() {
@@ -92,20 +89,52 @@ public class CreateTask extends Activity implements
 	}
 
 	private void addListenerOnColorButtons() {
-		redBtn.setOnClickListener(listenerOnColorButton("red"));
-		greenBtn.setOnClickListener(listenerOnColorButton("green"));
-		yellowBtn.setOnClickListener(listenerOnColorButton("yellow"));
-		blueBtn.setOnClickListener(listenerOnColorButton("blue"));
-		orangeBtn.setOnClickListener(listenerOnColorButton("orange"));
+		redBtn.setOnClickListener(listenerOnColorButton());
+		greenBtn.setOnClickListener(listenerOnColorButton());
+		yellowBtn.setOnClickListener(listenerOnColorButton());
+		blueBtn.setOnClickListener(listenerOnColorButton());
+		greyBtn.setOnClickListener(listenerOnColorButton());
+		pinkBtn.setOnClickListener(listenerOnColorButton());
 	}
 
-	private View.OnClickListener listenerOnColorButton(final String color) {
+	private View.OnClickListener listenerOnColorButton() {
 		View.OnClickListener color_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
-				color_view.setText(color);
+				turnN(currentColorBtn);
+				turnU(v);
 			}
 		};
 		return color_on_click_listener;
+	}
+
+	private void turnU(View v) {
+		currentColorBtn = (ImageButton) v;
+		switch (v.getId()) {
+		case R.id.redColor:
+			color = Color.RED;
+			v.setBackgroundResource(R.drawable.red_u);
+			break;
+		case R.id.blueColor:
+			color = Color.BLUE;
+			v.setBackgroundResource(R.drawable.blue_u);
+			break;
+		case R.id.yellowColor:
+			color = Color.YELLOW;
+			v.setBackgroundResource(R.drawable.yellow_u);
+			break;
+		case R.id.greyColor:
+			color = Color.GREY;
+			v.setBackgroundResource(R.drawable.grey_u);
+			break;
+		case R.id.pinkColor:
+			color = Color.PINK;
+			v.setBackgroundResource(R.drawable.pink_u);
+			break;
+		case R.id.greenColor:
+			color = Color.GREEN;
+			v.setBackgroundResource(R.drawable.green_u);
+			break;
+		}
 	}
 
 	private String getCurrentYear() {
@@ -127,6 +156,49 @@ public class CreateTask extends Activity implements
 		SimpleDateFormat df = new SimpleDateFormat("dd");
 		String formattedDate = df.format(c.getTime());
 		return formattedDate;
+	}
+
+	private void turnN(View v) {
+		switch (v.getId()) {
+		case R.id.redColor:
+			v.setBackgroundResource(R.drawable.red_n);
+			break;
+		case R.id.blueColor:
+			v.setBackgroundResource(R.drawable.blue_n);
+			break;
+		case R.id.yellowColor:
+			v.setBackgroundResource(R.drawable.yellow_n);
+			break;
+		case R.id.greyColor:
+			v.setBackgroundResource(R.drawable.grey_n);
+			break;
+		case R.id.pinkColor:
+			v.setBackgroundResource(R.drawable.pink_n);
+			break;
+		case R.id.greenColor:
+			v.setBackgroundResource(R.drawable.green_n);
+			break;
+		}
+	}
+
+	private void setColorImage(String currentColor) {
+		if (currentColor.equals(Color.RED))
+			findViewById(R.id.redColor).setBackgroundResource(R.drawable.red_u);
+		else if (currentColor.equals(Color.BLUE))
+			findViewById(R.id.blueColor).setBackgroundResource(
+					R.drawable.blue_u);
+		else if (currentColor.equals(Color.YELLOW))
+			findViewById(R.id.yellowColor).setBackgroundResource(
+					R.drawable.yellow_u);
+		else if (currentColor.equals(Color.GREY))
+			findViewById(R.id.greyColor).setBackgroundResource(
+					R.drawable.grey_u);
+		else if (currentColor.equals(Color.PINK))
+			findViewById(R.id.pinkColor).setBackgroundResource(
+					R.drawable.pink_u);
+		else if (currentColor.equals(Color.GREEN))
+			findViewById(R.id.greenColor).setBackgroundResource(
+					R.drawable.green_u);
 	}
 
 	// switch button
@@ -152,8 +224,7 @@ public class CreateTask extends Activity implements
 		View.OnClickListener update_button_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
 				title = title_edit.getText().toString();
-				String color = color_view.getText().toString();
-				String ddl = newYear + "-" + newMonth + "-" + newDay;
+				String ddl = makeDeadline();
 
 				currentTask = new Task(CreateTask.this);
 				currentTask.setUrgent(isUrgent);
@@ -176,7 +247,6 @@ public class CreateTask extends Activity implements
 		newYear = selectedYear;
 		newMonth = selectedMonth + 1;
 		newDay = selectedDay;
-		deadline_text.setText(makeDeadline());
 	}
 
 }
