@@ -33,7 +33,7 @@ public class Timer extends Service {
 
 	private Handler customHandler = new Handler();
 	private Runnable updateTimerThread;
-
+	boolean broadcast = true;
 	String timeFrom;
 	String timeTo;
 
@@ -59,10 +59,12 @@ public class Timer extends Service {
 					secs = secs % 60;
 					timerValue = ("" + mins + ":" + String.format("%02d", secs));
 
-					Intent i = new Intent("android.intent.action.TIMER");
-					i.putExtra("time", timerValue);
-					i.putExtra("title", title);
-					Timer.this.sendBroadcast(i);
+					if (Timer.this.broadcast) {
+						Intent i = new Intent("android.intent.action.TIMER");
+						i.putExtra("time", timerValue);
+						i.putExtra("title", title);
+						Timer.this.sendBroadcast(i);
+					}
 
 					customHandler.postDelayed(this, 0);
 				}
@@ -90,10 +92,11 @@ public class Timer extends Service {
 		timeInMilliseconds = 0L;
 		timeSwapBuff = 0L;
 		updatedTime = 0L;
-		timeTo = getCurrentTime();
+		stopSelf();
 	}
 
 	public String makeRecord() {
+		timeTo = getCurrentTime();
 		return timeFrom + "/" + timeTo;
 	}
 
@@ -110,6 +113,10 @@ public class Timer extends Service {
 	@Override
 	public IBinder onBind(Intent intent) {
 		return mBinder;
+	}
+
+	public void setBroadcast(boolean b) {
+		this.broadcast = b;
 	}
 
 }

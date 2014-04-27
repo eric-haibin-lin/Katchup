@@ -6,8 +6,6 @@
     tools:context=".MainActivity" 
     android:theme="@android:style/Theme.NoTitleBar">
 
-    
- 
     <ListView
         android:id="@+id/android:list"
         android:layout_width="wrap_content"

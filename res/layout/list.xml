@@ -9,31 +9,39 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/urgent"
-            android:layout_width="wrap_content"
-            android:layout_height="40dip"
-            android:text="isUrgent" />
-
-        <Button
+        <ImageButton
             android:id="@+id/color"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="40dip"
-            android:src="@drawable/ic_launcher"
+            android:layout_gravity="left"
+            android:layout_weight="0.12"
+            android:adjustViewBounds="true"
+            android:background="#ffffffff"
+            android:scaleType="fitCenter"
             android:text="Color" />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.50"
-            android:text="Title"
-            android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="40dip"
+            android:layout_gravity="center"
+            android:layout_weight="0.78" >
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:layout_gravity="center_horizontal"
+                android:minWidth="200dip"
+                android:text="Title"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/edit"
-            android:layout_width="30dip"
-            android:layout_height="30dip" />
+            android:layout_width="0dp"
+            android:layout_height="30dip"
+            android:layout_gravity="center"
+            android:layout_weight="0.1" />
     </LinearLayout>
 
 </LinearLayout>

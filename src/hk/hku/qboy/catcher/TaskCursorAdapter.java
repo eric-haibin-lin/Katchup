@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class TaskCursorAdapter extends CursorAdapter {
@@ -16,10 +17,12 @@ public class TaskCursorAdapter extends CursorAdapter {
 	Context context;
 	String currentTitle;
 	String currentColor;
-	String isUrgent;
+	boolean isUrgent;
 	MainActivity main;
 	int completed = 0;
 	int id;
+
+	ImageButton colorBtn;
 
 	@SuppressWarnings("deprecation")
 	public TaskCursorAdapter(Context context, Cursor c) {
@@ -46,21 +49,27 @@ public class TaskCursorAdapter extends CursorAdapter {
 		id = cursor.getInt(cursor.getColumnIndex(TaskProvider._ID));
 		int urgentValue = cursor.getInt(cursor
 				.getColumnIndex(TaskProvider.URGENT));
-		isUrgent = urgentValue > 0 ? "Urgent" : "Not Urgent";
-		Log.d("CURSOR_ADAPTER",
-				currentTitle + " completed: " + String.valueOf(completed));
+		isUrgent = urgentValue > 0 ? true : false;
+		Log.d("CURSOR_ADAPTER", currentTitle + " id: " + String.valueOf(id));
 
+		// Task task = new Task((MainActivity) context, id);
+		// if (task.testUrgent()) {
+		// task.setUrgent(1);
+		// task.update();
+		// }
+		// Log.d("Total", task.getTotalTime());
 	}
 
 	// Start timer when click on task title
 	private void addStartClickListener(View view) {
 		TextView title_text = (TextView) view.findViewById(R.id.title);
 		final String title = currentTitle;
+		final int idToPass = id;
 		View.OnClickListener start_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent timerIntent = new Intent(main, TimerActivity.class);
 				timerIntent.putExtra("title", title);
-				timerIntent.putExtra("id_key", id);
+				timerIntent.putExtra("id_key", idToPass);
 				main.startActivity(timerIntent);
 			}
 		};
@@ -69,12 +78,9 @@ public class TaskCursorAdapter extends CursorAdapter {
 
 	private void updateDataInListView(View view) {
 		TextView title = (TextView) view.findViewById(R.id.title);
-		Button urgent = (Button) view.findViewById(R.id.urgent);
-		Button color = (Button) view.findViewById(R.id.color);
-
+		colorBtn = (ImageButton) view.findViewById(R.id.color);
 		title.setText(currentTitle);
-		color.setText(currentColor);
-		urgent.setText(isUrgent);
+		setColorImage();
 	}
 
 	@Override
@@ -87,15 +93,37 @@ public class TaskCursorAdapter extends CursorAdapter {
 		return v;
 	}
 
+	private void setColorImage() {
+		if (currentColor.equals(Color.RED))
+			colorBtn.setBackgroundResource(isUrgent ? R.drawable.red_u
+					: R.drawable.red_n);
+		else if (currentColor.equals(Color.BLUE))
+			colorBtn.setBackgroundResource(isUrgent ? R.drawable.blue_u
+					: R.drawable.blue_n);
+		else if (currentColor.equals(Color.YELLOW))
+			colorBtn.setBackgroundResource(isUrgent ? R.drawable.yellow_u
+					: R.drawable.yellow_n);
+		else if (currentColor.equals(Color.GREY))
+			colorBtn.setBackgroundResource(isUrgent ? R.drawable.grey_u
+					: R.drawable.grey_n);
+		else if (currentColor.equals(Color.PINK))
+			colorBtn.setBackgroundResource(isUrgent ? R.drawable.pink_u
+					: R.drawable.pink_n);
+		else if (currentColor.equals(Color.GREEN))
+			colorBtn.setBackgroundResource(isUrgent ? R.drawable.green_u
+					: R.drawable.green_n);
+	}
+
 	private void addOnClickListener(View view, String currentTitle) {
 		Button editButton = (Button) view.findViewById(R.id.edit);
 		editButton.setBackgroundResource(R.drawable.edit);
 		final String title = currentTitle;
+		final int idToPass = id;
 		View.OnClickListener edit_button_on_click_listener = new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(context, TaskDetail.class);
 				intent.putExtra("title_key", title);
-				intent.putExtra("id_key", id);
+				intent.putExtra("id_key", idToPass);
 				Log.d("ADAPTER", title);
 				context.startActivity(intent);
 			}

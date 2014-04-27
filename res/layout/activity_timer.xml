@@ -3,52 +3,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".TimerActivity" >
 
-    <CheckBox
-        android:id="@+id/wifiBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/startButton"
-        android:layout_marginTop="67dp"
-        android:text="Turn off Wifi" />
-
-    <CheckBox
-        android:id="@+id/cellularBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/wifiBox"
-        android:text="Turn off Cellular data" />
+    <TextView
+        android:id="@+id/timerValue"
+        android:layout_width="350dip"
+        android:layout_height="300dip"
+        android:adjustViewBounds="true"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:scaleType="fitCenter"
+        android:text="0:00"
+        android:textColor="#FFFFFF"
+        android:textSize="100dip" />
 
     <TextView
         android:id="@+id/taskText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="56dp"
-        android:text="Current task" />
-
-    <Button
-        android:id="@+id/startButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_below="@+id/timerValue"
         android:layout_centerHorizontal="true"
-        android:text="Start/Pause" />
-
-    <TextView
-        android:id="@+id/timerValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/taskText"
-        android:layout_centerHorizontal="true"
-        android:text="0:00"
-        android:textSize="100dip" />
+        android:layout_marginTop="37dp"
+        android:text="Current task" />
 
 </RelativeLayout>

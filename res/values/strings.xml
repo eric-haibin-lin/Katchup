@@ -8,5 +8,8 @@
     <string name="no_title_label">(No title)</string>
     <string name="title_activity_timer">TimerActivity</string>
     <string name="title_activity_create_task">CreateTask</string>
+    <string name="title_activity_setting">SettingActivity</string>
+    <string name="preference_wifi">WIFI_PREF</string>
+    <string name="preference_data">DATA_PREF</string>
 
 </resources>

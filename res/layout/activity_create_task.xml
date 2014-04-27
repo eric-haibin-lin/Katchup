@@ -45,12 +45,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="Deadline " />
-
-            <TextView
-                android:id="@+id/deadlineText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
         </LinearLayout>
 
         <GridLayout
@@ -95,18 +89,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.4"
                     android:text="Color" />
-
-                <TextView
-                    android:id="@+id/tagColorButton"
-                    android:layout_width="106dp"
-                    android:layout_height="25dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="0.6"
-                    android:background="#C6E2FF"
-                    android:ems="10"
-                    android:shape="oval"
-                    android:text="red" />
             </LinearLayout>
 
             <LinearLayout
@@ -118,36 +100,65 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_launcher"
-                    android:text="Red" />
+                    android:adjustViewBounds="true"
+                    android:background="#ffffffff"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/red_n" />
 
                 <ImageButton
                     android:id="@+id/blueColor"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_launcher" />
+                    android:adjustViewBounds="true"
+                    android:background="#ffffffff"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/blue_n" />
 
                 <ImageButton
                     android:id="@+id/yellowColor"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_launcher" />
+                    android:adjustViewBounds="true"
+                    android:background="#ffffffff"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/yellow_n" />
 
                 <ImageButton
-                    android:id="@+id/orangeColor"
+                    android:id="@+id/greyColor"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_launcher" />
+                    android:adjustViewBounds="true"
+                    android:background="#ffffffff"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/grey_n" />
 
                 <ImageButton
                     android:id="@+id/greenColor"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_launcher" />
+                    android:adjustViewBounds="true"
+                    android:background="#ffffffff"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/green_n" />
+
+                <ImageButton
+                    android:id="@+id/pinkColor"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:adjustViewBounds="true"
+                    android:background="#ffffffff"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/pink_n" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
             </LinearLayout>
 
             <Button

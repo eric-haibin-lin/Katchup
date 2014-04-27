@@ -3,11 +3,11 @@ package hk.hku.qboy.catcher;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -15,15 +15,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 public class TimerActivity extends Activity {
-	private Button startButton;
 	private TextView timerValue;
 	private Task task;
 
@@ -35,11 +34,14 @@ public class TimerActivity extends Activity {
 	IntentFilter intentFilter;
 	public ServiceConnection Scon;
 
+	boolean wifiPreference;
+	boolean dataPreference;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_timer);
-
+		readPreference();
 		createConnection();
 		addTimerButtonListener();
 		registerTimerReceiver();
@@ -48,14 +50,29 @@ public class TimerActivity extends Activity {
 		id = i.getIntExtra("id_key", 0);
 		Log.d("Timer Activity", "title is " + title);
 		setCurrentTaskText(title);
-		task = new Task(this, id);
-
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.timer, menu);
 		return true;
+	}
+
+	private void readPreference() {
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(getApplicationContext());
+		String wifiPreferenceStr = sharedPreferences.getString(
+				getString(R.string.preference_wifi), "false");
+		String dataPreferenceStr = sharedPreferences.getString(
+				getString(R.string.preference_data), "false");
+		if (wifiPreferenceStr.equals("true"))
+			wifiPreference = true;
+		else
+			wifiPreference = false;
+		if (dataPreferenceStr.equals("true"))
+			dataPreference = true;
+		else
+			dataPreference = false;
 	}
 
 	// create a connection with the service binder
@@ -91,21 +108,22 @@ public class TimerActivity extends Activity {
 
 	private void addTimerButtonListener() {
 		timerValue = (TextView) findViewById(R.id.timerValue);
-		startButton = (Button) findViewById(R.id.startButton);
+		timerValue.setBackgroundResource(R.drawable.red_time);
 
 		Intent timerService = new Intent(this, Timer.class);
 		doBindService(timerService);
 		startService(timerService);
 
-		startButton.setOnClickListener(new View.OnClickListener() {
+		timerValue.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				if (timer.isCountingTime) {
+					destroyTimer();
 					finish();
 				} else {
-					if (task != null) {
-						timer.start();
-						checkSettings();
-					}
+					timerValue.setBackgroundResource(R.drawable.green_time);
+					task = new Task(TimerActivity.this, id);
+					timer.start();
+					checkSettings();
 				}
 			}
 		});
@@ -135,29 +153,23 @@ public class TimerActivity extends Activity {
 	}
 
 	private void checkSettings() {
-		final CheckBox wifiBox = (CheckBox) findViewById(R.id.wifiBox);
-		final CheckBox cellularBox = (CheckBox) findViewById(R.id.cellularBox);
-
-		if (wifiBox.isChecked()) {
+		if (wifiPreference) {
 			WifiManager wifiManager = (WifiManager) this
 					.getSystemService(Context.WIFI_SERVICE);
 			wifiManager.setWifiEnabled(false);
 		}
-		if (cellularBox.isChecked()) {
+		if (dataPreference) {
 			setMobileDataEnabled(false);
 		}
 	}
 
 	private void resetSettings() {
-		final CheckBox wifiBox = (CheckBox) findViewById(R.id.wifiBox);
-		final CheckBox cellularBox = (CheckBox) findViewById(R.id.cellularBox);
-
-		if (wifiBox.isChecked()) {
+		if (wifiPreference) {
 			WifiManager wifiManager = (WifiManager) this
 					.getSystemService(Context.WIFI_SERVICE);
 			wifiManager.setWifiEnabled(true);
 		}
-		if (cellularBox.isChecked()) {
+		if (dataPreference) {
 			setMobileDataEnabled(true);
 		}
 	}
@@ -196,19 +208,24 @@ public class TimerActivity extends Activity {
 		}
 	}
 
-	@Override
-	// this is called either from back button or stop timer button.
-	protected void onDestroy() {
-		super.onDestroy();
+	private void destroyTimer() {
 		this.unregisterReceiver(mReceiver);
+		String newTimerRecord = timer.makeRecord();
 		timer.finish();
 		if (task != null) {
-			String newTimerRecord = timer.makeRecord();
 			task.addTrackRecord(newTimerRecord);
 			task.update();
 		}
 		doUnbindService();
 		resetSettings();
+		Log.d("TIMER", "destroyTimer");
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		destroyTimer();
+		this.finish();
 	}
 
 }
