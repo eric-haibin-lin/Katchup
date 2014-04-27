@@ -50,6 +50,7 @@
 
         <activity
             android:name="hk.hku.qboy.catcher.TimerActivity"
+            android:configChanges="orientation"
             android:label="@string/title_activity_timer"
             android:screenOrientation="portrait" >
         </activity>

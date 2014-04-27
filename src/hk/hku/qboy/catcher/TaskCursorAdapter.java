@@ -20,7 +20,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 
 	Context context;
 	String currentTitle;
-	String currentColor;
+	int currentColor;
 	boolean isUrgent;
 	MainActivity main;
 	int completed = 0;
@@ -54,8 +54,8 @@ public class TaskCursorAdapter extends CursorAdapter {
 	private void getDataFromCursor(Cursor cursor) {
 		currentTitle = cursor.getString(cursor
 				.getColumnIndex(TaskProvider.TITLE));
-		currentColor = cursor.getString(cursor
-				.getColumnIndex(TaskProvider.COLOR));
+		currentColor = Integer.parseInt(cursor.getString(cursor
+				.getColumnIndex(TaskProvider.COLOR)));
 		completed = cursor
 				.getInt(cursor.getColumnIndex(TaskProvider.COMPLETED));
 		id = cursor.getInt(cursor.getColumnIndex(TaskProvider._ID));
@@ -142,22 +142,22 @@ public class TaskCursorAdapter extends CursorAdapter {
 	}
 
 	private void setColorImage() {
-		if (currentColor.equals(Color.RED))
+		if (currentColor == (Color.RED))
 			colorBtn.setBackgroundResource(isUrgent ? R.drawable.red_u
 					: R.drawable.red_n);
-		else if (currentColor.equals(Color.BLUE))
+		else if (currentColor == (Color.BLUE))
 			colorBtn.setBackgroundResource(isUrgent ? R.drawable.blue_u
 					: R.drawable.blue_n);
-		else if (currentColor.equals(Color.YELLOW))
+		else if (currentColor == (Color.YELLOW))
 			colorBtn.setBackgroundResource(isUrgent ? R.drawable.yellow_u
 					: R.drawable.yellow_n);
-		else if (currentColor.equals(Color.GREY))
+		else if (currentColor == (Color.GREY))
 			colorBtn.setBackgroundResource(isUrgent ? R.drawable.grey_u
 					: R.drawable.grey_n);
-		else if (currentColor.equals(Color.PINK))
+		else if (currentColor == (Color.PINK))
 			colorBtn.setBackgroundResource(isUrgent ? R.drawable.pink_u
 					: R.drawable.pink_n);
-		else if (currentColor.equals(Color.GREEN))
+		else if (currentColor == (Color.GREEN))
 			colorBtn.setBackgroundResource(isUrgent ? R.drawable.green_u
 					: R.drawable.green_n);
 	}

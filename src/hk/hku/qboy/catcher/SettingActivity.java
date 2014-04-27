@@ -1,9 +1,11 @@
 package hk.hku.qboy.catcher;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -11,6 +13,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 public class SettingActivity extends Activity {
+
+	static private final Uri tasks_provider = TaskProvider.CONTENT_URI;
 
 	CheckBox wifiBox;
 	CheckBox cellularBox;
@@ -98,4 +102,18 @@ public class SettingActivity extends Activity {
 		cancel_btn.setOnClickListener(listener);
 	}
 
+	private void countTotalTimeTracked() {
+		Cursor cursor = getContentResolver().query(tasks_provider, null, null,
+				null, null);
+		if (cursor != null) {
+			cursor.moveToFirst();
+			// iterate over rows
+			for (int i = 0; i < cursor.getCount(); i++) {
+				// stringBuilder.append("\n");
+				// move to the next row
+				cursor.moveToNext();
+			}
+			cursor.close();
+		}
+	}
 }

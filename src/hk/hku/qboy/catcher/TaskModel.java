@@ -52,7 +52,7 @@ public class TaskModel {
 				Log.e(log_tag, error_message);
 			}
 		}
-
+		cursor.close();
 		return num_rows_updated;
 	}
 
@@ -72,30 +72,30 @@ public class TaskModel {
 	}
 
 	// delete title
-	public int delete(String title) {
-		int num_rows_deleted = 0;
-
-		try {
-			if (TextUtils.isEmpty(title)) {
-				num_rows_deleted = activity.getContentResolver().delete(
-						books_provider, null, null);
-			} else {
-				String selection_clause = TaskProvider.TITLE + " = ?";
-				String[] selection_args = { "" };
-				selection_args[0] = title;
-
-				num_rows_deleted = activity.getContentResolver().delete(
-						books_provider, selection_clause, selection_args);
-			}
-		} catch (Exception e) {
-			final String error_message = "error in deleting";
-			Toast.makeText(activity.getBaseContext(), error_message,
-					Toast.LENGTH_SHORT);
-			Log.e(log_tag, error_message);
-		}
-
-		return num_rows_deleted;
-	}
+	// public int delete(String title) {
+	// int num_rows_deleted = 0;
+	//
+	// try {
+	// if (TextUtils.isEmpty(title)) {
+	// num_rows_deleted = activity.getContentResolver().delete(
+	// books_provider, null, null);
+	// } else {
+	// String selection_clause = TaskProvider.TITLE + " = ?";
+	// String[] selection_args = { "" };
+	// selection_args[0] = title;
+	//
+	// num_rows_deleted = activity.getContentResolver().delete(
+	// books_provider, selection_clause, selection_args);
+	// }
+	// } catch (Exception e) {
+	// final String error_message = "error in deleting";
+	// Toast.makeText(activity.getBaseContext(), error_message,
+	// Toast.LENGTH_SHORT);
+	// Log.e(log_tag, error_message);
+	// }
+	//
+	// return num_rows_deleted;
+	//	}
 
 	// insert
 	public int insert(ContentValues content_values) {
@@ -111,6 +111,7 @@ public class TaskModel {
 					Toast.LENGTH_SHORT);
 			Log.e(log_tag, error_message);
 		}
+
 		return num_rows_updated;
 	}
 }

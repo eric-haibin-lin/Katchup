@@ -52,4 +52,14 @@
         android:layout_centerVertical="true"
         android:text="Turn off Wifi for me!" />
 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_above="@+id/wifiBox"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_marginBottom="17dp"
+        android:paddingTop="5dp"
+        android:text="Total Time Tracked: " />
+
 </RelativeLayout>

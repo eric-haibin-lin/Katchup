@@ -23,10 +23,7 @@ public class Task {
 	private String record = "";
 	private int completed = 0;
 	private long totalSec = 0;
-
-	private int deadlineYear;
-	private int deadlineMonth;
-	private int deadlineDay;
+	private long avgSec = 0;
 
 	// Constructor
 	public Task(Activity activity, int id) {
@@ -105,8 +102,8 @@ public class Task {
 			cursor.moveToNext();
 			setDeadline(cursor.getString(cursor
 					.getColumnIndex(TaskProvider.DDL)));
-			setColor(Integer.parseInt(cursor
-					.getString(cursor.getColumnIndex(TaskProvider.COLOR))));
+			setColor(Integer.parseInt(cursor.getString(cursor
+					.getColumnIndex(TaskProvider.COLOR))));
 			setUrgent(cursor.getInt(cursor.getColumnIndex(TaskProvider.URGENT)));
 			setRecord(cursor.getString(cursor
 					.getColumnIndex(TaskProvider.RECORD)));
@@ -161,9 +158,10 @@ public class Task {
 	private void calculateTime() {
 		Time start = new Time(TimeZone.getDefault().getDisplayName());
 		Time end = new Time(TimeZone.getDefault().getDisplayName());
-
+		int count = 0;
 		String[] records = this.record.split(";");
 		for (String currentRecord : records) {
+			count++;
 			String[] p = currentRecord.split("/");
 			if (p[0].length() < 8 || p[1].length() < 8) {
 				continue;
@@ -176,10 +174,19 @@ public class Task {
 			Log.d("INTERVAL", String.valueOf(intervalSecond));
 			totalSec += intervalSecond;
 		}
+		avgSec = totalSec / count;
 	}
 
 	public String getTotalTime() {
-		long totalMin = totalSec / 60;
+		return getTotalTime(totalSec);
+	}
+
+	public String getAverageTime() {
+		return getTotalTime(avgSec);
+	}
+
+	private String getTotalTime(long time) {
+		long totalMin = time / 60;
 		String totalTime = "";
 		if (totalMin >= 60) {
 			long totalHour = totalMin / 60;
@@ -191,7 +198,5 @@ public class Task {
 		}
 		return totalTime;
 	}
-
-
 
 }

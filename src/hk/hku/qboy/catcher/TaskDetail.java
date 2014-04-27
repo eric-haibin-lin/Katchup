@@ -101,8 +101,9 @@ public class TaskDetail extends Activity implements
 		picker.init(newYear, newMonth - 1, newDay, this);
 		Log.d("Color", "color from task:" + color);
 		setColorImage(color);
-		task_list.setText(currentTask.getTotalTime());
-
+		task_list.setText("Total Catchup: " + currentTask.getTotalTime()
+				+ "\nAverage Catchup:"
+				+ currentTask.getAverageTime());
 	}
 
 	// parse the deadline string to get day, month, year.
