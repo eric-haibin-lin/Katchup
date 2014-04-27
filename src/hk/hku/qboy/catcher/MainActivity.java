@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.TabWidget;
 import android.widget.TextView;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -79,7 +80,20 @@ public class MainActivity extends FragmentActivity {
 		// 2
 		tabHost.addTab(tabHost.newTabSpec("Calendar").setIndicator(tabMonth),
 				DayFragment.class, null);
+		TabWidget widget = tabHost.getTabWidget();
+		for(int i = 0; i < widget.getChildCount(); i++) {
+		    View v = widget.getChildAt(i);
 
+		    // Look for the title view to ensure this is an indicator and not a divider.
+		    TextView tv = (TextView)v.findViewById(android.R.id.title);
+		    if(tv == null) {
+		        continue;
+		    }
+		    v.setBackgroundResource(R.drawable.tab_selector);
+		}
+	
+	
+	
 	}
 
 	public void changeMonth(String mon) {
