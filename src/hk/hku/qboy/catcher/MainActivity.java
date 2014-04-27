@@ -66,6 +66,8 @@ public class MainActivity extends FragmentActivity {
 		// 2
 		tabHost.addTab(tabHost.newTabSpec("Calendar").setIndicator(tabMonth),
 				DayFragment.class, null);
+		//3
+		tabHost.addTab(tabHost.newTabSpec("Demo").setIndicator("demo"),ListGplayCardFragment.class,null);
 		TabWidget widget = tabHost.getTabWidget();
 		for (int i = 0; i < widget.getChildCount(); i++) {
 			View v = widget.getChildAt(i);

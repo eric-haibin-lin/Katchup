@@ -11,5 +11,8 @@
     <string name="title_activity_setting">SettingActivity</string>
     <string name="preference_wifi">WIFI_PREF</string>
     <string name="preference_data">DATA_PREF</string>
+    <string name="demo_trademark">Google and the Google Maps logo are registered trademarks of Google Inc.</string>
+    <string name="carddemo_title_list_gplaycard">List Google Play</string>
+    <string name="carddemo_title_list_gplaycard_undo">List with undo</string>
 
 </resources>
