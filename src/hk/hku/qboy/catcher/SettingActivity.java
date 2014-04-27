@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -31,13 +33,19 @@ public class SettingActivity extends Activity {
 		addConfirmListener();
 		addCancelListener();
 		countTotalTimeTracked();
-		totalText.setText("Total Catchup: " + getTotalTime(totalSec));
+		totalText.setText("Total Katchup: " + getTotalTime(totalSec));
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.setting, menu);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.setting, menu);
+//		View v = getActionBar().getCustomView();
+//		TextView titleTxtView = (TextView) v.findViewById(R.id.actionbarTitle);
+//	    titleTxtView.setText(title);
+//		MenuItem menuItem = menu.findItem(R.id.title);
+//		menuItem.setTitle("Setting");
 		return true;
 	}
 
