@@ -25,7 +25,10 @@
         android:layout_alignLeft="@+id/textView1"
         android:layout_below="@+id/cellularBox"
         android:layout_marginTop="42dp"
-        android:text="Cancel" />
+        android:background="@drawable/button"
+        android:text="Cancel"
+        android:textColor="@color/titlebackgroundcolor"
+        android:width="100dp" />
 
     <CheckBox
         android:id="@+id/cellularBox"
@@ -42,7 +45,10 @@
         android:layout_alignBaseline="@+id/cancel_btn"
         android:layout_alignBottom="@+id/cancel_btn"
         android:layout_alignRight="@+id/cellularBox"
-        android:text="Confirm" />
+        android:background="@drawable/button"
+        android:text="Confirm"
+        android:textColor="@color/titlebackgroundcolor"
+        android:width="100dp" />
 
     <CheckBox
         android:id="@+id/wifiBox"
