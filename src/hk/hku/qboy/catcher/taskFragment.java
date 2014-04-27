@@ -26,6 +26,7 @@ public class taskFragment extends ListFragment {
 		V = inflater.inflate(R.layout.main1, container, false);
 		getActivity().setTitle("Katchup");
 		setListAdapter();
+
 		return V;
 	}
 

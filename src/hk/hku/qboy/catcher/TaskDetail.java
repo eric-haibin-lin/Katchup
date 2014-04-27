@@ -65,6 +65,7 @@ public class TaskDetail extends Activity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.task_detail, menu);
+		getActionBar().setTitle("Edit");
 		return true;
 	}
 

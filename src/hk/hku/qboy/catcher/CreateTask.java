@@ -52,6 +52,7 @@ public class CreateTask extends Activity implements
 		addListenerOnUpdateButton();
 		addListenerOnSwitchButton();
 		addListenerOnColorButtons();
+		generateDemoTasks();
 
 	}
 
@@ -227,6 +228,11 @@ public class CreateTask extends Activity implements
 				title = title_edit.getText().toString();
 				if (title.equals(""))
 					return;
+				if (title.equals("testdemo")) {
+					generateDemoTasks();
+					return;
+				}
+
 				String ddl = makeDeadline();
 				currentTask = new Task(CreateTask.this);
 				currentTask.setUrgent(isUrgent);
@@ -249,6 +255,38 @@ public class CreateTask extends Activity implements
 		newYear = selectedYear;
 		newMonth = selectedMonth + 1;
 		newDay = selectedDay;
+	}
+
+	private void generateDemoTasks() {
+
+		Task task = new Task(this);
+
+		task.setUrgent(1);
+		task.setDeadline("2014-4-28");
+		task.setColor(Color.RED);
+		task.setTitle("CSIS 3330 Project");
+
+		task.addTrackRecord("20140427T000000/20140427T003000;20140427T090500/20140427T091000;20140427T140500/20140427T145500;20140427T1600500/20140427T1721000");
+		task.insert();
+
+		task = new Task(this);
+		task.setUrgent(0);
+		task.setDeadline("2014-5-28");
+		task.setColor(Color.BLUE);
+		task.setTitle("CSIS 234 Assignment");
+
+		task.addTrackRecord("20140427T110000/20140427T110800;20140427T173000/20140427T175000;20140427T180500/20140427T181000");
+		task.insert();
+
+		task = new Task(this);
+		task.setUrgent(1);
+		task.setDeadline("2014-4-28");
+		task.setColor(Color.GREEN);
+		task.setTitle("CSIS 3330 Final Demo");
+
+		task.addTrackRecord("20140427T190500/20140427T191000;20140427T192500/20140427T221000;20140427T221500/20140427T232000;20140428T001925/20140428T011000");
+		task.insert();
+
 	}
 
 }
