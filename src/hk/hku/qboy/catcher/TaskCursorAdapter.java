@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class TaskCursorAdapter extends CursorAdapter {
@@ -16,10 +17,12 @@ public class TaskCursorAdapter extends CursorAdapter {
 	Context context;
 	String currentTitle;
 	String currentColor;
-	String isUrgent;
+	boolean isUrgent;
 	MainActivity main;
 	int completed = 0;
 	int id;
+
+	ImageButton colorBtn;
 
 	@SuppressWarnings("deprecation")
 	public TaskCursorAdapter(Context context, Cursor c) {
@@ -46,7 +49,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 		id = cursor.getInt(cursor.getColumnIndex(TaskProvider._ID));
 		int urgentValue = cursor.getInt(cursor
 				.getColumnIndex(TaskProvider.URGENT));
-		isUrgent = urgentValue > 0 ? "Urgent" : "Not Urgent";
+		isUrgent = urgentValue > 0 ? true : false;
 		Log.d("CURSOR_ADAPTER", currentTitle + " id: " + String.valueOf(id));
 	}
 
@@ -68,9 +71,9 @@ public class TaskCursorAdapter extends CursorAdapter {
 
 	private void updateDataInListView(View view) {
 		TextView title = (TextView) view.findViewById(R.id.title);
-		Button color = (Button) view.findViewById(R.id.color);
+		colorBtn = (ImageButton) view.findViewById(R.id.color);
 		title.setText(currentTitle);
-		color.setText(currentColor);
+		setColorImage();
 	}
 
 	@Override
@@ -81,6 +84,27 @@ public class TaskCursorAdapter extends CursorAdapter {
 		View v = inflater.inflate(R.layout.list, parent, false);
 		bindView(v, context, cursor);
 		return v;
+	}
+
+	private void setColorImage() {
+		if (currentColor.equals(Color.RED))
+			colorBtn.setBackgroundResource(isUrgent ? R.drawable.red_u
+					: R.drawable.red_n);
+		else if (currentColor.equals(Color.BLUE))
+			colorBtn.setBackgroundResource(isUrgent ? R.drawable.blue_u
+					: R.drawable.blue_n);
+		else if (currentColor.equals(Color.YELLOW))
+			colorBtn.setBackgroundResource(isUrgent ? R.drawable.yellow_u
+					: R.drawable.yellow_n);
+		else if (currentColor.equals(Color.GREY))
+			colorBtn.setBackgroundResource(isUrgent ? R.drawable.grey_u
+					: R.drawable.grey_n);
+		else if (currentColor.equals(Color.PINK))
+			colorBtn.setBackgroundResource(isUrgent ? R.drawable.pink_u
+					: R.drawable.pink_n);
+		else if (currentColor.equals(Color.GREEN))
+			colorBtn.setBackgroundResource(isUrgent ? R.drawable.green_u
+					: R.drawable.green_n);
 	}
 
 	private void addOnClickListener(View view, String currentTitle) {

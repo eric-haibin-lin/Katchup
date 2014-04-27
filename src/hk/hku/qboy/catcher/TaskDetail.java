@@ -216,7 +216,6 @@ public class TaskDetail extends Activity implements
 		else
 			Log.d("COLOR", "non found.");
 		Log.d("COLOR", currentColor);
-
 	}
 
 	// switch button to set urgent
