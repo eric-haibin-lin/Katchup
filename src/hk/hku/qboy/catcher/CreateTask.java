@@ -52,7 +52,7 @@ public class CreateTask extends Activity implements
 		addListenerOnUpdateButton();
 		addListenerOnSwitchButton();
 		addListenerOnColorButtons();
-		generateDemoTasks();
+//		generateDemoTasks();
 
 	}
 
@@ -266,7 +266,7 @@ public class CreateTask extends Activity implements
 		task.setColor(Color.RED);
 		task.setTitle("CSIS 3330 Project");
 
-		task.addTrackRecord("20140427T000000/20140427T003000;20140427T090500/20140427T091000;20140427T140500/20140427T145500;20140427T1600500/20140427T1721000");
+		task.addTrackRecord("20140427T000000/20140427T003000;20140427T090500/20140427T091000;20140427T140500/20140427T145500;20140427T160500/20140427T172100");
 		task.insert();
 
 		task = new Task(this);

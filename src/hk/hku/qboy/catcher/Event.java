@@ -121,6 +121,7 @@ public class Event implements Cloneable {
 	private static final int PROJECTION_ORGANIZER_INDEX = 17;
 	private static final int PROJECTION_GUESTS_CAN_INVITE_OTHERS_INDEX = 18;
 	private static final int PROJECTION_DISPLAY_AS_ALLDAY = 19;
+	private static final long OFFSET = 8*60*60*1000;
 
 	private static String mNoTitleString;
 	private static int mNoColorColor;
@@ -312,7 +313,7 @@ public class Event implements Cloneable {
 				}
 
 			});
-			Log.d(TAG, "Built list " + events.toString());
+//			Log.d(TAG, "Built list " + events.toString());
 		} finally {
 			if (cEvents != null) {
 				cEvents.close();
@@ -368,7 +369,7 @@ public class Event implements Cloneable {
 			e.isRepeating = false;
 			String[] records = cTasks.getString(TASK_RECORD_INDEX).split(";");
 			for (String record : records) {
-				Log.d(TAG, e.title + record);
+//				Log.d(TAG, e.title + record);
 				try {
 					String[] p = record.split("/");
 					if (p[0].length() < 8 || p[1].length() < 8) {
@@ -382,7 +383,6 @@ public class Event implements Cloneable {
 					end.parse(p[1]);
 					e.startMillis = start.toMillis(false);
 					e.endMillis = end.toMillis(false);
-					Log.d(TAG, "gmtoff " + start.gmtoff + " " + end.gmtoff);
 					e.startDay = Time.getJulianDay(e.startMillis, start.gmtoff);
 					e.endDay = Time.getJulianDay(e.endMillis, end.gmtoff);
 					e.startTime = (int) ((e.startMillis - new Time(TimeZone
@@ -394,12 +394,14 @@ public class Event implements Cloneable {
 					if (e.startTime == e.endTime) {
 						e.endTime++;
 					}
-					Log.d(TAG,
-							e.title
-									+ String.format("%d %d, %d %d, %d %d",
-											e.startMillis, e.endMillis,
-											e.startDay, e.endDay, e.startTime,
-											e.endTime));
+					e.startMillis = e.startMillis-OFFSET;
+					e.endMillis = e.endMillis-OFFSET;
+//					Log.d(TAG,
+//							e.title
+//									+ String.format("%d %d, %d %d, %d %d",
+//											e.startMillis, e.endMillis,
+//											e.startDay, e.endDay, e.startTime,
+//											e.endTime));
 					if (e.startDay > endDay || e.endDay < startDay) {
 						continue;
 					}
@@ -554,11 +556,11 @@ public class Event implements Cloneable {
 
 		e.selfAttendeeStatus = cEvents
 				.getInt(PROJECTION_SELF_ATTENDEE_STATUS_INDEX);
-		Log.d(TAG,
-				e.title
-						+ String.format("%d %d, %d %d, %d %d", e.startMillis,
-								e.endMillis, e.startDay, e.endDay, e.startTime,
-								e.endTime));
+//		Log.d(TAG,
+//				e.title
+//						+ String.format("%d %d, %d %d, %d %d", e.startMillis,
+//								e.endMillis, e.startDay, e.endDay, e.startTime,
+//								e.endTime));
 		return e;
 	}
 
@@ -604,7 +606,7 @@ public class Event implements Cloneable {
 			long minimumDurationMillis, boolean doAlldayEvents) {
 		final ArrayList<Event> activeList = new ArrayList<Event>();
 		final ArrayList<Event> groupList = new ArrayList<Event>();
-		Log.d(TAG, eventsList.toString());
+//		Log.d(TAG, eventsList.toString());
 		if (minimumDurationMillis < 0) {
 			minimumDurationMillis = 0;
 		}
@@ -619,7 +621,7 @@ public class Event implements Cloneable {
 			if (!doAlldayEvents) {
 				colMask = removeNonAlldayActiveEvents(event,
 						activeList.iterator(), minimumDurationMillis, colMask);
-				Log.d(TAG, activeList.toString());
+//				Log.d(TAG, activeList.toString());
 			} else {
 				colMask = removeAlldayActiveEvents(event,
 						activeList.iterator(), colMask);
@@ -678,17 +680,18 @@ public class Event implements Cloneable {
 		while (iter.hasNext()) {
 			final Event active = iter.next();
 
-			final long duration = Math.max(
+			final long duration1 = Math.max(
 					active.getEndMillis() - active.getStartMillis(),
 					minDurationMillis);
-			if ((active.getStartMillis() + duration) <= start) {
+			final long duration2 = Math.max(
+					event.getEndMillis() - event.getStartMillis(),
+					minDurationMillis);
+			if ((active.getStartMillis() + duration1) <= start || active.getStartMillis() >= event.getEndMillis()) {
 				colMask &= ~(1L << active.getColumn());
 				iter.remove();
-				Log.d(TAG, "active:" + active.getEndMillis() + " " + active
-						+ "event " + event + event.getStartMillis());
 			} else {
-				Log.d(TAG, "active:" + active.getEndMillis() + " " + active
-						+ "event " + event + event.getStartMillis());
+//				Log.d(TAG, "active:" + active.getStartMillis()+" "+active.getEndMillis() + " " + active
+//						+ "event " + event.getStartMillis()+ event + event.getEndMillis());
 			}
 		}
 		return colMask;
