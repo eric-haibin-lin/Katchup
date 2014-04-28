@@ -230,6 +230,7 @@ public class CreateTask extends Activity implements
 					return;
 				if (title.equals("testdemo")) {
 					generateDemoTasks();
+					finish();
 					return;
 				}
 
