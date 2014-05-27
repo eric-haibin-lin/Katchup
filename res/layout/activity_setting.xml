@@ -16,7 +16,9 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="26dp"
-        android:text="Katchup is an Android app that helps you track your productivity every. Blahblah. Blahblah. Blahblah. Blahblah. Blahblah. Blahblah. Blahblah. Blahblah. Blahblah. Blahblah. Blahblah. Blahblah. Blahblah. Blahblah. Blahblah.  Blahblah. Blahblah." />
+        android:text="Katchup is an Android app that helps you track your productivity everyday. It helps you record how much time spent on each task, and displays your calendar activity and task summary in a weekly view accordingly. 
+        
+" />
 
     <Button
         android:id="@+id/cancel_btn"
@@ -57,17 +59,15 @@
         android:layout_alignLeft="@+id/cellularBox"
         android:layout_centerVertical="true"
         android:text="Turn off Wifi for me!" />
-    
+
     <TextView
         android:id="@+id/totalTime"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="30dp"
         android:layout_above="@+id/wifiBox"
         android:layout_alignLeft="@+id/textView1"
         android:layout_marginBottom="17dp"
         android:paddingTop="5dp"
         android:text="Total Time Tracked: " />
-
-
 
 </RelativeLayout>
