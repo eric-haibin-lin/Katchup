@@ -263,29 +263,29 @@ public class CreateTask extends Activity implements
 		Task task = new Task(this);
 
 		task.setUrgent(1);
-		task.setDeadline("2014-4-28");
+		task.setDeadline("2014-5-28");
 		task.setColor(Color.RED);
-		task.setTitle("CSIS 3330 Project");
+		task.setTitle("CSIS 3330 Report");
 
-		task.addTrackRecord("20140427T000000/20140427T003000;20140427T090500/20140427T091000;20140427T140500/20140427T145500;20140427T160500/20140427T172100");
+		task.addTrackRecord("20140527T000000/20140527T003000;20140527T090500/20140527T091000;20140527T140500/20140527T145500;20140527T160500/20140527T172100");
 		task.insert();
 
 		task = new Task(this);
 		task.setUrgent(0);
-		task.setDeadline("2014-5-28");
+		task.setDeadline("2014-6-28");
 		task.setColor(Color.BLUE);
 		task.setTitle("CSIS 234 Assignment");
 
-		task.addTrackRecord("20140427T110000/20140427T110800;20140427T173000/20140427T175000;20140427T180500/20140427T181000");
+		task.addTrackRecord("20140527T110000/20140527T110800;20140527T173000/20140527T175000;20140527T180500/20140527T181000");
 		task.insert();
 
 		task = new Task(this);
 		task.setUrgent(1);
-		task.setDeadline("2014-4-28");
+		task.setDeadline("2014-7-28");
 		task.setColor(Color.GREEN);
-		task.setTitle("CSIS 3330 Final Demo");
+		task.setTitle("CSIS 3330 Final Review");
 
-		task.addTrackRecord("20140427T190500/20140427T191000;20140427T192500/20140427T221000;20140427T221500/20140427T232000;20140428T001925/20140428T011000");
+		task.addTrackRecord("20140527T190500/20140527T191000;20140527T192500/20140527T221000;20140527T221500/20140527T232000;20140528T001925/20140528T011000");
 		task.insert();
 
 	}
