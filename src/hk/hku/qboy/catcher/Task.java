@@ -1,20 +1,19 @@
 package hk.hku.qboy.catcher;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.TimeZone;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.Log;
+import android.widget.Toast;
 
 @SuppressLint({ "ShowToast", "SimpleDateFormat" })
 public class Task {
-
-	private TaskModel taskModel;
+	private Activity activity;
 	private int urgent;
 	private int id;
 	private String title;
@@ -25,10 +24,13 @@ public class Task {
 	private long totalSec = 0;
 	private long avgSec = 0;
 
+	static private final Uri books_provider = TaskProvider.CONTENT_URI;
+	static private String log_tag = "catcher";
+
 	// Constructor
 	public Task(Activity activity, int id) {
+		this.activity = activity;
 		this.id = id;
-		this.taskModel = new TaskModel(activity);
 		queryFromDatabase();
 		calculateTime();
 		return;
@@ -39,7 +41,7 @@ public class Task {
 	}
 
 	public Task(Activity activity) {
-		this.taskModel = new TaskModel(activity);
+		this.activity = activity;
 		return;
 	}
 
@@ -92,15 +94,26 @@ public class Task {
 	}
 
 	public int update() {
-		return this.taskModel.update(makeContent());
-	}
+		return this.update(makeContent());
+	};
 
 	public int insert() {
-		return this.taskModel.insert(makeContentWithoutId());
+		ContentValues content_values = makeContentWithoutId();
+		int num_rows_updated = 0;
+		try {
+			activity.getContentResolver()
+					.insert(books_provider, content_values);
+			num_rows_updated++;
+		} catch (Exception e) {
+			final String error_message = "error in inserting "
+					+ content_values.get(TaskProvider.TITLE);
+			Log.e(log_tag, error_message);
+		}
+		return num_rows_updated;
 	}
 
 	public void queryFromDatabase() {
-		Cursor cursor = taskModel.find(id);
+		Cursor cursor = find(id);
 		if (cursor.getCount() != 0) {
 			Log.d("Task", String.valueOf(id) + title + " found in db!");
 			cursor.moveToNext();
@@ -127,7 +140,6 @@ public class Task {
 		content_values.put(TaskProvider.URGENT, urgent);
 		content_values.put(TaskProvider.RECORD, record);
 		content_values.put(TaskProvider.COMPLETED, completed);
-
 		return content_values;
 	}
 
@@ -203,4 +215,49 @@ public class Task {
 		return totalTime;
 	}
 
+	private int update(ContentValues content_values) {
+		String title = (String) content_values.get(TaskProvider.TITLE);
+		Integer id = (Integer) content_values.get(TaskProvider._ID);
+
+		Cursor cursor = find(id);
+
+		int num_rows_updated = 0;
+
+		if ((cursor == null) || (cursor.getCount() <= 0)) {
+			if (TextUtils.isEmpty(title)) {
+			} else {
+				// num_rows_updated = this.insertWithContent(content_values);
+			}
+		} else {
+			try {
+				String selection_clause = TaskProvider._ID + " = ?";
+				String[] selection_args = { "" };
+				selection_args[0] = String.valueOf(id);
+				num_rows_updated = activity.getContentResolver().update(
+						books_provider, content_values, selection_clause,
+						selection_args);
+			} catch (Exception e) {
+				final String error_message = "error in updating " + title;
+				Toast.makeText(activity.getBaseContext(), error_message,
+						Toast.LENGTH_SHORT);
+				Log.e(log_tag, error_message);
+			}
+		}
+		cursor.close();
+		return num_rows_updated;
+	}
+
+	public Cursor find(int id) {
+		Cursor cursor = null;
+		if (id == 0) {
+			cursor = null;
+		} else {
+			String selection_clause = TaskProvider._ID + " = ?";
+			String[] selection_args = { "" };
+			selection_args[0] = String.valueOf(id);
+			cursor = activity.getContentResolver().query(books_provider, null,
+					selection_clause, selection_args, null);
+		}
+		return cursor;
+	}
 }
