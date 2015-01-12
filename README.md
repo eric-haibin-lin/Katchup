@@ -3,4 +3,5 @@ Katchup is a productivity application that allows users maintain a to-do list an
 =======
 
 
+<img src="documentation/intro.png" />
 <img src="documentation/ScreenShot.png" />
